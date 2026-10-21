@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GearItem" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/economy/gear_item.gd" id="1_gear"]
+
+[resource]
+script = ExtResource("1_gear")
+id = "kail_circle_2"
+display_name = "Mata Kail Circle No. 2"
+slot = 3
+price = 600
+description = "Mata kail bulat besar. Masa sentap lama, ikan besar banyak."
+strike_window = 1.8
+size_bias = 1.4

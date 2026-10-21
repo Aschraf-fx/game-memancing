@@ -1,11 +1,12 @@
 class_name HUD
 extends CanvasLayer
-## Paparan: syiling, mesej, bar charge, bar ketegangan tali dan "SENTAP!".
+## Paparan: syiling, umpan, mesej, bar charge, bar ketegangan tali dan "SENTAP!".
 
 @export var rod: FishingRod
 @export var message_duration := 3.0
 
 var _coins: Label
+var _bait: Label
 var _message: Label
 var _strike: Label
 var _charge: ProgressBar
@@ -17,6 +18,9 @@ var _message_timer := 0.0
 
 func _ready() -> void:
 	_coins = _label("Syiling: 0", 30, Vector2(24, 18))
+	_coins.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	_bait = _label("", 22, Vector2(24, 132))
+	_bait.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_message = _label("", 28, Vector2.ZERO)
 	_message.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
 	_message.offset_top = 24
@@ -41,8 +45,12 @@ func _ready() -> void:
 	rod.message.connect(show_message)
 
 
-func set_coins(value: int) -> void:
-	_coins.text = "Syiling: %d" % value
+func refresh(data: PlayerData) -> void:
+	_coins.text = "Syiling: %d" % data.coins
+	var bait := data.equipped_item(GearItem.Slot.UMPAN)
+	var left := data.bait_count()
+	_bait.text = "%s  |  Umpan: %s%s" % [data.equipped_item(GearItem.Slot.JORAN).display_name,
+		bait.display_name, " x%d" % left if left >= 0 else ""]
 
 
 func show_message(text: String) -> void:

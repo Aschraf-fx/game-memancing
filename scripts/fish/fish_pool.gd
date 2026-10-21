@@ -17,20 +17,27 @@ func water_height() -> float:
 	return global_position.y
 
 
-func roll_species() -> FishSpecies:
+## rare_luck datang dari umpan: setiap tahap kejarangan didarab sekali lagi,
+## jadi umpan "ikan jarang x2" buat ikan Sangat Jarang 8x lebih kerap.
+func roll_species(rare_luck := 1.0) -> FishSpecies:
 	var total := 0.0
 	for s in species:
-		total += s.spawn_weight
+		total += _chance(s, rare_luck)
 	var r := randf() * total
 	for s in species:
-		r -= s.spawn_weight
+		r -= _chance(s, rare_luck)
 		if r <= 0.0:
 			return s
 	return species.back()
 
 
-func roll_bite_delay() -> float:
-	return randf_range(bite_delay.x, bite_delay.y)
+func _chance(s: FishSpecies, rare_luck: float) -> float:
+	return s.spawn_weight * pow(rare_luck, s.rarity)
+
+
+## bite_mult datang dari umpan: < 1 = ikan makan lebih cepat.
+func roll_bite_delay(bite_mult := 1.0) -> float:
+	return randf_range(bite_delay.x, bite_delay.y) * bite_mult
 
 
 func _on_body_entered(body: Node3D) -> void:

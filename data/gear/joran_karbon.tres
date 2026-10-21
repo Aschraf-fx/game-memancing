@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="GearItem" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/economy/gear_item.gd" id="1_gear"]
+
+[resource]
+script = ExtResource("1_gear")
+id = "joran_karbon"
+display_name = "Joran Karbon"
+slot = 0
+price = 1500
+description = "Ringan dan keras. Lontar jauh, kuat lawan ikan besar."
+cast_distance = 40.0
+charge_time = 0.95
+power = 58.0

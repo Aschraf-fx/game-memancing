@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GearItem" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/economy/gear_item.gd" id="1_gear"]
+
+[resource]
+script = ExtResource("1_gear")
+id = "kail_10"
+display_name = "Mata Kail No. 10"
+slot = 3
+price = 0
+description = "Mata kail kecil. Sesuai ikan kecil."
+strike_window = 1.1
+size_bias = 2.2

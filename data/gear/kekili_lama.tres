@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GearItem" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/economy/gear_item.gd" id="1_gear"]
+
+[resource]
+script = ExtResource("1_gear")
+id = "kekili_lama"
+display_name = "Kekili Lama"
+slot = 1
+price = 0
+description = "Kekili lama warisan atuk. Masih boleh pakai."
+reel_speed = 1.6
+drag_threshold = 0.85

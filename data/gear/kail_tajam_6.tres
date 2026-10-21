@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GearItem" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/economy/gear_item.gd" id="1_gear"]
+
+[resource]
+script = ExtResource("1_gear")
+id = "kail_tajam_6"
+display_name = "Mata Kail Tajam No. 6"
+slot = 3
+price = 120
+description = "Lebih tajam, senang lekat. Ikan besar lebih kerap."
+strike_window = 1.4
+size_bias = 1.8

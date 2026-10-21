@@ -3,6 +3,8 @@ extends Node
 ## Otak memancing: charge → lontar → tunggu → sentap → tarik-tali → dapat / putus.
 
 signal caught(fish: HookedFish)
+## Ikan makan umpan (umpan berkurang satu).
+signal bait_taken
 signal message(text: String)
 
 enum State { IDLE, CHARGING, FLYING, WAITING, BITING, FIGHTING, RETRIEVING }
@@ -16,10 +18,6 @@ enum State { IDLE, CHARGING, FLYING, WAITING, BITING, FIGHTING, RETRIEVING }
 @export var launch_angle := 32.0
 ## Ketepatan berkurang bila charge penuh (darjah).
 @export var full_charge_spread := 4.0
-
-@export_group("Sentap")
-## Masa (saat) untuk tekan GULUNG selepas pelampung tenggelam.
-@export var strike_window := 1.1
 
 @export_group("Tarik-tali")
 ## Jarak (meter) ikan dikira dah sampai ke tangan.
@@ -79,7 +77,7 @@ func _process(delta: float) -> void:
 			elif _timer <= 0.0:
 				message.emit("Ikan lari, tak sempat sentap!")
 				fish = null
-				_timer = _pool.roll_bite_delay()
+				_timer = _pool.roll_bite_delay(rod.bite_mult)
 				state = State.WAITING
 
 		State.FIGHTING:
@@ -123,7 +121,7 @@ func _cast() -> void:
 
 func _on_landed_in_water(p: FishPool) -> void:
 	_pool = p
-	_timer = p.roll_bite_delay()
+	_timer = p.roll_bite_delay(rod.bite_mult)
 	line_length = _flat_distance(bobber.global_position)
 	_enter(State.WAITING)
 
@@ -134,10 +132,11 @@ func _on_landed_on_ground() -> void:
 
 
 func _start_bite() -> void:
-	fish = HookedFish.new(_pool.roll_species())
-	_timer = strike_window
-	bobber.nibble(strike_window)
+	fish = HookedFish.new(_pool.roll_species(rod.rare_luck), rod.size_bias)
+	_timer = rod.strike_window
+	bobber.nibble(rod.strike_window)
 	state = State.BITING
+	bait_taken.emit()
 	Input.vibrate_handheld(150)
 
 
@@ -197,7 +196,6 @@ func _fight(reeling: bool, delta: float) -> void:
 
 	if line_length <= land_distance:
 		var f := fish
-		message.emit("Dapat %s %.2f kg (+%d syiling)" % [f.species.display_name, f.weight, f.value()])
 		_enter(State.IDLE)
 		caught.emit(f)
 
