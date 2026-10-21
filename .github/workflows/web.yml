@@ -51,7 +51,20 @@ jobs:
           mkdir -p build/web
           godot --headless --path . --export-release "Web" build/web/index.html
           test -f build/web/index.html
-          ls -la build/web
+
+      # GitHub Pages suruh browser simpan fail 10 minit. Data game (index.pck)
+      # diberi nama baru setiap versi supaya fon terus ambil versi terkini
+      # bila page dibuka semula, tak main versi lama yang tersimpan.
+      - name: Nama baru untuk data game setiap versi
+        run: |
+          v="${GITHUB_SHA::8}"
+          cd build/web
+          mv index.pck "index-$v.pck"
+          sed -i -e "s/const GODOT_CONFIG = {/const GODOT_CONFIG = {\"mainPack\":\"index-$v.pck\",/" \
+                 -e "s/\"index\.pck\"/\"index-$v.pck\"/g" index.html
+          grep -o "GODOT_CONFIG = {[^;]*" index.html | head -c 300; echo
+          grep -q "\"mainPack\":\"index-$v.pck\"" index.html
+          ls -la
 
       - uses: actions/upload-pages-artifact@v3
         with:
