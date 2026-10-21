@@ -20,6 +20,11 @@ static var look_delta := Vector2.ZERO
 
 
 func _ready() -> void:
+	# Di PC, klik tetikus dikira sentuhan supaya butang skrin boleh diuji.
+	# Di fon (termasuk browser fon) matikan, kalau tak sentuhan jari bercampur
+	# dengan "tetikus palsu" dan kamera melompat.
+	var on_phone := OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios")
+	Input.emulate_touch_from_mouse = not on_phone
 	for action in KEYS:
 		if not InputMap.has_action(action):
 			InputMap.add_action(action, 0.2)

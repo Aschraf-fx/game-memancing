@@ -29,6 +29,31 @@ func _run() -> void:
 	Input.action_release("move_forward")
 	_check(angler.global_position.z < start.z - 0.5, "pemain boleh berjalan ke depan")
 
+	# Sentuhan dua jari: jalan dengan joystick sambil seret kamera.
+	var touch: Control = main.get_node("Touch/TouchControls")
+	var lay: Dictionary = touch._layout()
+	var stick: Vector2 = lay["stick"][0]
+	var look_start := Vector2(touch.size.x * 0.75, touch.size.y * 0.4)
+	_touch(0, stick, true)
+	_drag(0, stick + Vector2(0, -lay["stick"][1]))
+	_touch(1, look_start, true)
+	var yaw0 := angler.rotation.y
+	var pos0 := angler.global_position
+	for i in 20:
+		_drag(1, look_start + Vector2(4 * (i + 1), 0))
+		await physics_frame
+	var turned := absf(angle_difference(yaw0, angler.rotation.y))
+	_check(angler.global_position.distance_to(pos0) > 0.3, "jalan dengan joystick sambil seret kamera")
+	_check(turned > deg_to_rad(5) and turned < deg_to_rad(40), "kamera pusing ikut seretan (%.1f darjah)" % rad_to_deg(turned))
+	var yaw1 := angler.rotation.y
+	_drag(1, look_start + Vector2(900, 0))  # lompatan palsu dari browser
+	await physics_frame
+	await physics_frame
+	_check(absf(angle_difference(yaw1, angler.rotation.y)) < deg_to_rad(1), "lompatan seretan besar diabaikan")
+	_touch(1, look_start, false)
+	_touch(0, stick, false)
+	await physics_frame
+
 	var mode := angler.cam_mode
 	Input.action_press("toggle_camera")
 	await _frames(2)
@@ -80,6 +105,21 @@ func _run() -> void:
 
 	print("SELESAI: %d gagal" % failures)
 	quit(1 if failures else 0)
+
+
+func _touch(index: int, pos: Vector2, pressed: bool) -> void:
+	var ev := InputEventScreenTouch.new()
+	ev.index = index
+	ev.position = root.get_final_transform() * pos  # koordinat skrin sebenar
+	ev.pressed = pressed
+	Input.parse_input_event(ev)
+
+
+func _drag(index: int, pos: Vector2) -> void:
+	var ev := InputEventScreenDrag.new()
+	ev.index = index
+	ev.position = root.get_final_transform() * pos
+	Input.parse_input_event(ev)
 
 
 func _check(ok: bool, what: String) -> void:

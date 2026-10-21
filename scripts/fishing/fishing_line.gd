@@ -32,7 +32,7 @@ func _process(_delta: float) -> void:
 	if not bobber.visible or cam == null:
 		return
 
-	var a := angler.rod_tip.global_position
+	var a := angler.rod_tip.get_global_transform_interpolated().origin
 	var b := bobber.global_position + Vector3.UP * 0.06
 	var sag := max_sag * (1.0 - tension) * clampf(a.distance_to(b) / 10.0, 0.0, 1.0)
 	var mid := (a + b) * 0.5 + Vector3.DOWN * sag * 2.0

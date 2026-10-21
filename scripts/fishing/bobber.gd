@@ -17,6 +17,8 @@ var _t := 0.0
 
 
 func _ready() -> void:
+	# Pelampung digerakkan terus oleh skrip, jadi tak perlu physics interpolation.
+	physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
 	body_entered.connect(_on_body_entered)
 
 

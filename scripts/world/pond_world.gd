@@ -72,7 +72,6 @@ func _build_ground() -> void:
 	var mesh := st.commit()
 	var mat := StandardMaterial3D.new()
 	mat.vertex_color_use_as_albedo = true
-	mat.vertex_color_is_srgb = true
 	mat.roughness = 1.0
 	mat.cull_mode = BaseMaterial3D.CULL_DISABLED
 	mesh.surface_set_material(0, mat)
@@ -96,7 +95,8 @@ func _tri(st: SurfaceTool, a: Vector3, b: Vector3, c: Vector3) -> void:
 	var h := (a.y + b.y + c.y) / 3.0
 	var col := _ground_color(h, (a + b + c) / 3.0)
 	st.set_normal(normal)
-	st.set_color(col)
+	# Warna vertex mesti linear; tukar sendiri supaya sama di semua renderer (web & fon).
+	st.set_color(col.srgb_to_linear())
 	st.add_vertex(a)
 	st.add_vertex(b)
 	st.add_vertex(c)

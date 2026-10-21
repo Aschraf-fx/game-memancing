@@ -49,23 +49,18 @@ func _apply_cam_mode() -> void:
 			else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("toggle_camera"):
 		toggle_camera()
 
+
+# Semua perubahan kedudukan/pusingan dibuat dalam langkah fizik supaya
+# physics interpolation kekalkan gerakan licin (dalam _process skrin tersentak di fon).
+func _physics_process(delta: float) -> void:
 	var look := GameInput.consume_look() * look_sensitivity
 	rotate_y(deg_to_rad(-look.x))
 	head.rotation.x = clampf(head.rotation.x - deg_to_rad(look.y), deg_to_rad(min_pitch), deg_to_rad(max_pitch))
 
-	rod_pivot.rotation.x = _rod_rest_pitch - rod_bend * deg_to_rad(30.0)
-
-	# Badan terangguk sikit masa berjalan.
-	var speed := Vector2(velocity.x, velocity.z).length()
-	_walk_t += delta * speed * 4.0
-	body.position.y = absf(sin(_walk_t)) * 0.04 if speed > 0.1 else 0.0
-
-
-func _physics_process(delta: float) -> void:
 	var input := Vector2.ZERO
 	if not movement_locked:
 		input = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
@@ -77,3 +72,10 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.y -= 9.8 * delta
 	move_and_slide()
+
+	rod_pivot.rotation.x = _rod_rest_pitch - rod_bend * deg_to_rad(30.0)
+
+	# Badan terangguk sikit masa berjalan.
+	var speed := Vector2(velocity.x, velocity.z).length()
+	_walk_t += delta * speed * 4.0
+	body.position.y = absf(sin(_walk_t)) * 0.04 if speed > 0.1 else 0.0
