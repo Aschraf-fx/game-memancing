@@ -9,6 +9,7 @@ var failures := 0
 
 
 func _initialize() -> void:
+	seed(20261021)  # ikan sama setiap kali supaya ujian stabil
 	main = load("res://scenes/main.tscn").instantiate()
 	root.add_child(main)
 	rod = main.get_node("FishingRod")

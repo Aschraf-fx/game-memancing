@@ -1,0 +1,69 @@
+# Bina game untuk web (Godot) dan terbitkan ke GitHub Pages.
+# Setiap kali ada perubahan masuk "main", versi baru keluar di
+# https://<nama-akaun>.github.io/<nama-repo>/ dalam 2-4 minit.
+name: Bina & terbit web
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: web-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GODOT_VERSION: 4.4.1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pasang Godot + template web
+        run: |
+          cd "$RUNNER_TEMP"
+          base="https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable"
+          curl -sSLo godot.zip "$base/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          curl -sSLo templates.tpz "$base/Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
+          unzip -q godot.zip
+          mv "Godot_v${GODOT_VERSION}-stable_linux.x86_64" /usr/local/bin/godot
+          tpl="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          mkdir -p "$tpl"
+          unzip -qj templates.tpz 'templates/web_nothreads_*' 'templates/version.txt' -d "$tpl"
+          ls "$tpl"
+
+      - name: Import aset
+        run: godot --headless --path . --import
+
+      - name: Uji permainan
+        run: godot --headless --path . -s res://tests/test_flow.gd
+
+      - name: Eksport web
+        run: |
+          mkdir -p build/web
+          godot --headless --path . --export-release "Web" build/web/index.html
+          test -f build/web/index.html
+          ls -la build/web
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
