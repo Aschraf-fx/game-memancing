@@ -7,6 +7,9 @@ extends Control
 ## Di PC, klik tetikus dikira sebagai sentuhan (emulate_touch_from_mouse).
 
 @export var look_sensitivity := 1.0
+## Abaikan lompatan seretan yang lebih besar dari ni (piksel per event).
+## Sesetengah browser fon hantar lompatan besar bila jari kedua mula sentuh.
+@export var max_look_step := 80.0
 
 const BUTTONS := {
 	"cast": "LONTAR",
@@ -15,6 +18,7 @@ const BUTTONS := {
 }
 
 var _fingers := {}  # indeks jari -> peranan ("stick", "look", atau nama aksi)
+var _last_pos := {}  # indeks jari -> kedudukan terakhir (untuk kira seretan sendiri)
 var _stick := Vector2.ZERO
 
 
@@ -34,13 +38,18 @@ func _layout() -> Dictionary:
 	}
 
 
-func _input(event: InputEvent) -> void:
+func _input(raw_event: InputEvent) -> void:
+	if not (raw_event is InputEventScreenTouch or raw_event is InputEventScreenDrag):
+		return
+	# Tukar ke koordinat kawalan ni (ambil kira skala skrin fon yang berbeza-beza).
+	var event := make_input_local(raw_event)
 	if event is InputEventScreenTouch:
 		if event.pressed:
 			var role := _hit(event.position)
 			if role == "":
 				return
 			_fingers[event.index] = role
+			_last_pos[event.index] = event.position
 			if role == "stick":
 				_update_stick(event.position)
 			elif role != "look":
@@ -48,6 +57,7 @@ func _input(event: InputEvent) -> void:
 		else:
 			var role: String = _fingers.get(event.index, "")
 			_fingers.erase(event.index)
+			_last_pos.erase(event.index)
 			if role == "stick":
 				_update_stick(_layout()["stick"][0])
 			elif role in BUTTONS:
@@ -60,7 +70,12 @@ func _input(event: InputEvent) -> void:
 			_update_stick(event.position)
 			queue_redraw()
 		elif role == "look":
-			GameInput.look_delta += event.relative * look_sensitivity
+			# Kira seretan dari kedudukan jari ni sendiri, bukan event.relative,
+			# supaya jari joystick tak bercampur dengan jari kamera.
+			var step: Vector2 = event.position - _last_pos.get(event.index, event.position)
+			_last_pos[event.index] = event.position
+			if step.length() <= max_look_step:
+				GameInput.look_delta += step * look_sensitivity
 
 
 func _hit(pos: Vector2) -> String:

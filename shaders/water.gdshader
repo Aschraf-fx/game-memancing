@@ -2,7 +2,7 @@ shader_type spatial;
 render_mode blend_mix, cull_disabled;
 
 // Air low-poly: ombak kecil + permukaan bersegi (flat shading).
-uniform vec4 water_color : source_color = vec4(0.12, 0.42, 0.42, 0.85);
+uniform vec4 water_color : source_color = vec4(0.07, 0.3, 0.34, 0.88);
 uniform float wave_height = 0.05;
 uniform float wave_speed = 1.0;
 
@@ -20,5 +20,5 @@ void fragment() {
 	ALBEDO = water_color.rgb;
 	ALPHA = water_color.a;
 	ROUGHNESS = 0.15;
-	SPECULAR = 0.6;
+	SPECULAR = 0.4;
 }

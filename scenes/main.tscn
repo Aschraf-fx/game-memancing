@@ -21,8 +21,8 @@
 [ext_resource type="Script" path="res://scripts/core/game_input.gd" id="19_input"]
 
 [sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
-sky_top_color = Color(0.22, 0.48, 0.85, 1)
-sky_horizon_color = Color(0.68, 0.8, 0.9, 1)
+sky_top_color = Color(0.16, 0.4, 0.8, 1)
+sky_horizon_color = Color(0.6, 0.75, 0.9, 1)
 ground_bottom_color = Color(0.3, 0.36, 0.26, 1)
 ground_horizon_color = Color(0.68, 0.8, 0.9, 1)
 sun_angle_max = 20.0
@@ -33,12 +33,17 @@ sky_material = SubResource("sky_mat")
 [sub_resource type="Environment" id="env"]
 background_mode = 2
 sky = SubResource("sky")
-ambient_light_source = 3
-ambient_light_energy = 0.5
-tonemap_mode = 2
+ambient_light_source = 2
+ambient_light_color = Color(0.62, 0.7, 0.82, 1)
+ambient_light_energy = 0.55
+tonemap_mode = 3
+tonemap_white = 6.0
 fog_enabled = true
-fog_light_color = Color(0.7, 0.8, 0.9, 1)
-fog_density = 0.004
+fog_light_color = Color(0.62, 0.74, 0.88, 1)
+fog_density = 0.0015
+adjustment_enabled = true
+adjustment_contrast = 1.08
+adjustment_saturation = 1.25
 
 [sub_resource type="ShaderMaterial" id="water_mat"]
 render_priority = 0
@@ -68,7 +73,7 @@ environment = SubResource("env")
 [node name="Sun" type="DirectionalLight3D" parent="."]
 rotation = Vector3(-0.85, 0.6, 0)
 light_color = Color(1, 0.95, 0.86, 1)
-light_energy = 1.2
+light_energy = 0.85
 shadow_enabled = true
 directional_shadow_max_distance = 60.0
 

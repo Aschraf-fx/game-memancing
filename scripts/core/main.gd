@@ -21,6 +21,7 @@ func _physics_process(_delta: float) -> void:
 	if angler.global_position.y < -1.0:
 		angler.global_transform = _spawn
 		angler.velocity = Vector3.ZERO
+		angler.reset_physics_interpolation()
 		hud.show_message("Eh, jangan terjun kolam!")
 
 
