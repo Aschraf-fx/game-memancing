@@ -1,0 +1,126 @@
+[gd_scene load_steps=27 format=3]
+
+[ext_resource type="Script" path="res://scripts/core/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/world/pond_world.gd" id="2_world"]
+[ext_resource type="Script" path="res://scripts/fish/fish_pool.gd" id="3_pool"]
+[ext_resource type="Shader" path="res://shaders/water.gdshader" id="4_water"]
+[ext_resource type="PackedScene" path="res://scenes/angler.tscn" id="5_angler"]
+[ext_resource type="PackedScene" path="res://scenes/bobber.tscn" id="6_bobber"]
+[ext_resource type="Script" path="res://scripts/fishing/fishing_line.gd" id="7_line"]
+[ext_resource type="Script" path="res://scripts/fishing/fishing_rod.gd" id="8_rod"]
+[ext_resource type="Resource" path="res://data/rods/joran_buluh.tres" id="9_rodstats"]
+[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="10_hud"]
+[ext_resource type="Script" path="res://scripts/ui/touch_controls.gd" id="11_touch"]
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="12_species"]
+[ext_resource type="Resource" path="res://data/fish/tilapia.tres" id="13_tilapia"]
+[ext_resource type="Resource" path="res://data/fish/keli.tres" id="14_keli"]
+[ext_resource type="Resource" path="res://data/fish/lampam_jawa.tres" id="15_lampam"]
+[ext_resource type="Resource" path="res://data/fish/patin.tres" id="16_patin"]
+[ext_resource type="Resource" path="res://data/fish/haruan.tres" id="17_haruan"]
+[ext_resource type="Resource" path="res://data/fish/toman.tres" id="18_toman"]
+[ext_resource type="Script" path="res://scripts/core/game_input.gd" id="19_input"]
+
+[sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
+sky_top_color = Color(0.22, 0.48, 0.85, 1)
+sky_horizon_color = Color(0.68, 0.8, 0.9, 1)
+ground_bottom_color = Color(0.3, 0.36, 0.26, 1)
+ground_horizon_color = Color(0.68, 0.8, 0.9, 1)
+sun_angle_max = 20.0
+
+[sub_resource type="Sky" id="sky"]
+sky_material = SubResource("sky_mat")
+
+[sub_resource type="Environment" id="env"]
+background_mode = 2
+sky = SubResource("sky")
+ambient_light_source = 3
+ambient_light_energy = 0.5
+tonemap_mode = 2
+fog_enabled = true
+fog_light_color = Color(0.7, 0.8, 0.9, 1)
+fog_density = 0.004
+
+[sub_resource type="ShaderMaterial" id="water_mat"]
+render_priority = 0
+shader = ExtResource("4_water")
+
+[sub_resource type="PlaneMesh" id="water_mesh"]
+material = SubResource("water_mat")
+size = Vector2(62, 48)
+subdivide_width = 40
+subdivide_depth = 30
+
+[sub_resource type="BoxShape3D" id="water_shape"]
+size = Vector3(58, 3, 44)
+
+[node name="Main" type="Node3D" node_paths=PackedStringArray("rod", "angler", "hud")]
+script = ExtResource("1_main")
+rod = NodePath("FishingRod")
+angler = NodePath("Angler")
+hud = NodePath("HUD")
+
+[node name="GameInput" type="Node" parent="."]
+script = ExtResource("19_input")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.85, 0.6, 0)
+light_color = Color(1, 0.95, 0.86, 1)
+light_energy = 1.2
+shadow_enabled = true
+directional_shadow_max_distance = 60.0
+
+[node name="PondWorld" type="Node3D" parent="."]
+script = ExtResource("2_world")
+
+[node name="Water" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 4
+monitorable = false
+script = ExtResource("3_pool")
+species = Array[ExtResource("12_species")]([ExtResource("13_tilapia"), ExtResource("14_keli"), ExtResource("15_lampam"), ExtResource("16_patin"), ExtResource("17_haruan"), ExtResource("18_toman")])
+
+[node name="Surface" type="MeshInstance3D" parent="Water"]
+cast_shadow = 0
+mesh = SubResource("water_mesh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Water"]
+position = Vector3(0, -1.5, 0)
+shape = SubResource("water_shape")
+
+[node name="Angler" parent="." instance=ExtResource("5_angler")]
+position = Vector3(0, 0.6, 14.6)
+
+[node name="Bobber" parent="." instance=ExtResource("6_bobber")]
+
+[node name="FishingLine" type="MeshInstance3D" parent="." node_paths=PackedStringArray("angler", "bobber")]
+cast_shadow = 0
+script = ExtResource("7_line")
+angler = NodePath("../Angler")
+bobber = NodePath("../Bobber")
+
+[node name="FishingRod" type="Node" parent="." node_paths=PackedStringArray("angler", "bobber", "line")]
+script = ExtResource("8_rod")
+rod = ExtResource("9_rodstats")
+angler = NodePath("../Angler")
+bobber = NodePath("../Bobber")
+line = NodePath("../FishingLine")
+
+[node name="HUD" type="CanvasLayer" parent="." node_paths=PackedStringArray("rod")]
+script = ExtResource("10_hud")
+rod = NodePath("../FishingRod")
+
+[node name="Touch" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="TouchControls" type="Control" parent="Touch"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("11_touch")

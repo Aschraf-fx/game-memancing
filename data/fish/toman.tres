@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_fish"]
+
+[resource]
+script = ExtResource("1_fish")
+display_name = "Toman"
+color = Color(0.28, 0.34, 0.3, 1)
+min_weight = 2.0
+max_weight = 10.0
+pull_strength = 38.0
+aggression = 0.7
+stamina = 22.0
+coins_per_kg = 22
+spawn_weight = 0.3

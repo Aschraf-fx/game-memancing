@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_fish"]
+
+[resource]
+script = ExtResource("1_fish")
+display_name = "Keli"
+color = Color(0.3, 0.28, 0.25, 1)
+min_weight = 0.3
+max_weight = 3.0
+pull_strength = 20.0
+aggression = 0.35
+stamina = 12.0
+coins_per_kg = 10
+spawn_weight = 3.0

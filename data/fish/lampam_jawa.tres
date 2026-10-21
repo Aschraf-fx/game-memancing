@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_fish"]
+
+[resource]
+script = ExtResource("1_fish")
+display_name = "Lampam Jawa"
+color = Color(0.86, 0.8, 0.6, 1)
+min_weight = 0.2
+max_weight = 1.2
+pull_strength = 12.0
+aggression = 0.5
+stamina = 7.0
+coins_per_kg = 9
+spawn_weight = 3.0

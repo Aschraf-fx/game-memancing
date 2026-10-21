@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_fish"]
+
+[resource]
+script = ExtResource("1_fish")
+display_name = "Tilapia"
+color = Color(0.55, 0.62, 0.55, 1)
+min_weight = 0.2
+max_weight = 1.5
+pull_strength = 14.0
+aggression = 0.3
+stamina = 8.0
+coins_per_kg = 8
+spawn_weight = 4.0
