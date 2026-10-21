@@ -49,8 +49,8 @@ func refresh(data: PlayerData) -> void:
 	_coins.text = "Syiling: %d" % data.coins
 	var bait := data.equipped_item(GearItem.Slot.UMPAN)
 	var left := data.bait_count()
-	_bait.text = "%s  |  Umpan: %s%s" % [data.equipped_item(GearItem.Slot.JORAN).display_name,
-		bait.display_name, " x%d" % left if left >= 0 else ""]
+	_bait.text = "%s  |  %s  |  Umpan: %s%s" % [data.current_area().display_name,
+		data.equipped_item(GearItem.Slot.JORAN).display_name, bait.display_name, " x%d" % left if left >= 0 else ""]
 
 
 func show_message(text: String) -> void:

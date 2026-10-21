@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="FishingArea" load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/fishing_area.gd" id="1_wvfjt"]
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="2_ocuii"]
+[ext_resource type="Resource" path="res://data/fish/tilapia.tres" id="3_5qt1s"]
+[ext_resource type="Resource" path="res://data/fish/lampam_jawa.tres" id="4_at52d"]
+[ext_resource type="Resource" path="res://data/fish/baung.tres" id="5_113mn"]
+[ext_resource type="Resource" path="res://data/fish/sebarau.tres" id="6_xfwtu"]
+[ext_resource type="Resource" path="res://data/fish/toman.tres" id="7_2ynjt"]
+[ext_resource type="Resource" path="res://data/fish/temoleh.tres" id="8_k42wu"]
+
+[resource]
+script = ExtResource("1_wvfjt")
+id = "tasik"
+display_name = "Tasik Kenyir"
+place = "Inspirasi: tasik empangan di Terengganu"
+description = "Tasik luas dengan pulau dan pokok mati dalam air. Perlu kayak."
+kind = 2
+vehicle_tier = 1
+species = Array[ExtResource("2_ocuii")]([ExtResource("3_5qt1s"), ExtResource("4_at52d"), ExtResource("5_113mn"), ExtResource("6_xfwtu"), ExtResource("7_2ynjt"), ExtResource("8_k42wu")])
+bite_delay = Vector2(3, 10)
+water_color = Color(0.06, 0.26, 0.24, 0.9)
+fog_density = 0.0025

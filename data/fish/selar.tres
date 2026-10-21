@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_0ulpw"]
+
+[resource]
+script = ExtResource("1_0ulpw")
+display_name = "Selar"
+color = Color(0.74, 0.74, 0.5, 1)
+min_weight = 0.2
+max_weight = 1.0
+pull_strength = 14.0
+aggression = 0.5
+stamina = 7.0
+coins_per_kg = 16
+rarity = 0
+spawn_weight = 3.0

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="GearItem" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/economy/gear_item.gd" id="1_xo4xt"]
+
+[resource]
+script = ExtResource("1_xo4xt")
+id = "bot_kecil"
+display_name = "Bot Kecil"
+slot = 5
+price = 6000
+description = "Bot gentian kaca dengan enjin sangkut. Boleh ke laut cetek."
+tier = 3

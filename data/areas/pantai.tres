@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="FishingArea" load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/fishing_area.gd" id="1_0eepq"]
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="2_htobt"]
+[ext_resource type="Resource" path="res://data/fish/kembung.tres" id="3_wlqpb"]
+[ext_resource type="Resource" path="res://data/fish/selar.tres" id="4_mf0ov"]
+[ext_resource type="Resource" path="res://data/fish/todak.tres" id="5_bff2r"]
+[ext_resource type="Resource" path="res://data/fish/kerapu.tres" id="6_jihlt"]
+[ext_resource type="Resource" path="res://data/fish/talang.tres" id="7_flw5k"]
+
+[resource]
+script = ExtResource("1_0eepq")
+id = "pantai"
+display_name = "Pesisir Pantai Mersing"
+place = "Inspirasi: pantai timur Johor dan pulau kecil"
+description = "Air jernih biru dekat pantai dan pulau batu. Perlu bot kecil."
+kind = 4
+vehicle_tier = 3
+species = Array[ExtResource("2_htobt")]([ExtResource("3_wlqpb"), ExtResource("4_mf0ov"), ExtResource("5_bff2r"), ExtResource("6_jihlt"), ExtResource("7_flw5k")])
+bite_delay = Vector2(2.5, 8)
+water_color = Color(0.08, 0.48, 0.55, 0.85)
+fog_density = 0.0018

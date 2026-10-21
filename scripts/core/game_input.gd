@@ -15,6 +15,7 @@ const KEYS := {
 	"toggle_camera": [KEY_V],
 	"open_bag": [KEY_B],
 	"open_shop": [KEY_K],
+	"open_map": [KEY_M],
 }
 
 ## Seretan kamera (piksel) yang terkumpul sejak kali terakhir dibaca.

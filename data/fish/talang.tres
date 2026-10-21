@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_vx8uw"]
+
+[resource]
+script = ExtResource("1_vx8uw")
+display_name = "Talang"
+color = Color(0.84, 0.86, 0.88, 1)
+min_weight = 2.0
+max_weight = 10.0
+pull_strength = 42.0
+aggression = 0.7
+stamina = 20.0
+coins_per_kg = 32
+rarity = 2
+spawn_weight = 0.6

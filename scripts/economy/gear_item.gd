@@ -4,9 +4,9 @@ extends Resource
 ## New Resource > GearItem, kemudian tambah dalam GearCatalog.ITEMS.
 ## Hanya statistik untuk jenis (slot) barang tu yang dipakai.
 
-enum Slot { JORAN, KEKILI, TALI, MATA_KAIL, UMPAN }
+enum Slot { JORAN, KEKILI, TALI, MATA_KAIL, UMPAN, KENDERAAN }
 
-const SLOT_NAMES := ["Joran", "Kekili", "Tali", "Mata Kail", "Umpan"]
+const SLOT_NAMES := ["Joran", "Kekili", "Tali", "Mata Kail", "Umpan", "Kenderaan"]
 
 ## Nama unik, dipakai dalam fail simpanan. Jangan tukar lepas dah keluar.
 @export var id := "joran_buluh"
@@ -40,6 +40,11 @@ const SLOT_NAMES := ["Joran", "Kekili", "Tali", "Mata Kail", "Umpan"]
 ## Bilangan umpan dalam satu pek. 0 = tak habis-habis.
 @export var pack_size := 0
 
+@export_group("Kenderaan")
+## Tahap kenderaan: 0 kaki, 1 kayak, 2 sampan, 3 bot kecil, 4 bot laut dalam.
+## Kawasan yang perlukan tahap ni (atau lebih rendah) boleh dilawat.
+@export var tier := 0
+
 
 ## Satu baris statistik ringkas untuk kedai.
 func stats_text() -> String:
@@ -60,6 +65,12 @@ func stats_text() -> String:
 			t += "  |  Ikan jarang x%.1f" % rare_luck if rare_luck > 1.0 else ""
 			t += "  |  %d biji/pek" % pack_size if pack_size > 0 else "  |  Tak habis"
 			return t
+		Slot.KENDERAAN:
+			var names: Array[String] = []
+			for area in AreaCatalog.all():
+				if area.vehicle_tier == tier:
+					names.append(area.display_name)
+			return "Buka: " + ", ".join(names)
 	return ""
 
 

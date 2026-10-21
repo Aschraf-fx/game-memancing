@@ -91,6 +91,11 @@ func _process(delta: float) -> void:
 	angler.rod_bend = lerpf(angler.rod_bend, tension if fighting else 0.0, 8.0 * delta)
 
 
+## Batalkan pancingan (contoh bila pindah kawasan).
+func reset() -> void:
+	_enter(State.IDLE)
+
+
 func _enter(s: State) -> void:
 	state = s
 	angler.movement_locked = s != State.IDLE

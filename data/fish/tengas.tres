@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_sdcid"]
+
+[resource]
+script = ExtResource("1_sdcid")
+display_name = "Tengas"
+color = Color(0.72, 0.66, 0.48, 1)
+min_weight = 0.3
+max_weight = 2.0
+pull_strength = 18.0
+aggression = 0.6
+stamina = 10.0
+coins_per_kg = 16
+rarity = 1
+spawn_weight = 1.6

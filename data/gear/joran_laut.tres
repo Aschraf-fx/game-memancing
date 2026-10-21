@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="GearItem" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/economy/gear_item.gd" id="1_h56ra"]
+
+[resource]
+script = ExtResource("1_h56ra")
+id = "joran_laut"
+display_name = "Joran Laut Dalam"
+slot = 0
+price = 6000
+description = "Joran pendek tebal untuk ikan laut gergasi macam GT."
+cast_distance = 45.0
+charge_time = 1.0
+power = 85.0

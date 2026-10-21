@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="FishingArea" load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/fishing_area.gd" id="1_2e1yd"]
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="2_qxu5t"]
+[ext_resource type="Resource" path="res://data/fish/belanak.tres" id="3_6c4a8"]
+[ext_resource type="Resource" path="res://data/fish/duri.tres" id="4_yt3jy"]
+[ext_resource type="Resource" path="res://data/fish/siakap.tres" id="5_5jai4"]
+[ext_resource type="Resource" path="res://data/fish/senangin.tres" id="6_in5u0"]
+[ext_resource type="Resource" path="res://data/fish/jenahak.tres" id="7_3g6xe"]
+
+[resource]
+script = ExtResource("1_2e1yd")
+id = "muara"
+display_name = "Muara Kuala Selangor"
+place = "Inspirasi: muara berpaya bakau, pantai barat"
+description = "Air payau keruh antara bakau. Siakap dan jenahak menyorok di akar. Perlu sampan."
+kind = 3
+vehicle_tier = 2
+species = Array[ExtResource("2_qxu5t")]([ExtResource("3_6c4a8"), ExtResource("4_yt3jy"), ExtResource("5_5jai4"), ExtResource("6_in5u0"), ExtResource("7_3g6xe")])
+bite_delay = Vector2(3, 9)
+water_color = Color(0.3, 0.3, 0.2, 0.93)
+fog_density = 0.002

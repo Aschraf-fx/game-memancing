@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_421i4"]
+
+[resource]
+script = ExtResource("1_421i4")
+display_name = "GT (Giant Trevally)"
+color = Color(0.42, 0.46, 0.5, 1)
+min_weight = 8.0
+max_weight = 40.0
+pull_strength = 75.0
+aggression = 0.8
+stamina = 32.0
+coins_per_kg = 40
+rarity = 2
+spawn_weight = 0.5

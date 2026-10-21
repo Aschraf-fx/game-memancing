@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_y6urp"]
+
+[resource]
+script = ExtResource("1_y6urp")
+display_name = "Tenggiri"
+color = Color(0.6, 0.66, 0.74, 1)
+min_weight = 3.0
+max_weight = 20.0
+pull_strength = 52.0
+aggression = 0.7
+stamina = 24.0
+coins_per_kg = 36
+rarity = 1
+spawn_weight = 1.4

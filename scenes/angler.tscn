@@ -79,7 +79,7 @@ radius = 0.2
 
 [node name="Angler" type="CharacterBody3D"]
 collision_layer = 2
-collision_mask = 1
+collision_mask = 49
 script = ExtResource("1_angler")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -135,7 +135,7 @@ position = Vector3(0, 0, -2.4)
 position = Vector3(0, 1.62, 0)
 
 [node name="SpringArm3D" type="SpringArm3D" parent="Head"]
-collision_mask = 1
+collision_mask = 33
 shape = SubResource("shape_cam")
 spring_length = 3.5
 

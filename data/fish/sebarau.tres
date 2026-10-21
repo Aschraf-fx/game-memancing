@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_uxn0r"]
+
+[resource]
+script = ExtResource("1_uxn0r")
+display_name = "Sebarau"
+color = Color(0.8, 0.7, 0.36, 1)
+min_weight = 1.0
+max_weight = 6.0
+pull_strength = 34.0
+aggression = 0.7
+stamina = 16.0
+coins_per_kg = 22
+rarity = 2
+spawn_weight = 0.8

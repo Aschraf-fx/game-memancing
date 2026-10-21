@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_k3k4k"]
+
+[resource]
+script = ExtResource("1_k3k4k")
+display_name = "Senangin"
+color = Color(0.84, 0.78, 0.58, 1)
+min_weight = 1.0
+max_weight = 8.0
+pull_strength = 36.0
+aggression = 0.55
+stamina = 18.0
+coins_per_kg = 30
+rarity = 2
+spawn_weight = 0.7

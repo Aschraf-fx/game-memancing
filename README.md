@@ -6,7 +6,8 @@ Dibina dengan **Godot 4** (percuma, ringan, jalan lancar walaupun PC biasa).
 **Main terus di browser fon:** https://aschraf-fx.github.io/game-memancing/
 
 **Fasa 1:** satu kolam kampung, lontaran charge, sentap, tarik-tali dengan bar ketegangan, kamera FPV/TPV, kawalan sentuh.
-**Fasa 2 (sekarang):** beg ikan, jual ikan dapat syiling, kedai peralatan (joran, kekili, tali, mata kail, umpan), simpan automatik. 7 jenis ikan kolam.
+**Fasa 2:** beg ikan, jual ikan dapat syiling, kedai peralatan (joran, kekili, tali, mata kail, umpan), simpan automatik.
+**Fasa 3 (sekarang):** 6 kawasan memancing (kolam, sungai, tasik, muara, pesisir pantai, laut dalam) dengan ikan tempatan masing-masing (28 jenis semuanya), dan kenderaan (kayak → sampan → bot kecil → bot laut dalam) untuk buka kawasan baru.
 
 ---
 
@@ -28,6 +29,7 @@ Dibina dengan **Godot 4** (percuma, ringan, jalan lancar walaupun PC biasa).
 | Tukar FPV/TPV | **KAMERA** | V |
 | Beg ikan | **BEG** (kiri atas) | B |
 | Kedai | **KEDAI** (kiri atas) | K |
+| Peta (tukar kawasan) | **PETA** (kiri atas) | M |
 | Tutup menu | **TUTUP** | Esc |
 
 ### Cara main
@@ -41,16 +43,32 @@ Dibina dengan **Godot 4** (percuma, ringan, jalan lancar walaupun PC biasa).
 5. Tak dapat apa? Tahan GULUNG masa menunggu untuk tarik pelampung balik dan lontar semula.
 6. Buka **BEG** untuk jual ikan. Harga ikut jenis ikan, berat, dan kejarangan (Biasa x1, Luar Biasa x1.5, Jarang x2.5, Sangat Jarang x4). Ikan hampir saiz maksimum dapat bonus sampai +50%.
 7. Buka **KEDAI** untuk beli peralatan. Barang baru terus dipakai. Game berhenti sekejap masa menu dibuka.
-8. Semua disimpan automatik (syiling, beg, peralatan). Di browser, simpanan kekal walaupun tutup tab, kecuali guna mod incognito atau padam data laman. Nak mula semula: KEDAI > **PADAM SIMPANAN** (tekan dua kali).
+8. Buka **PETA** untuk pergi ke kawasan lain. Kawasan berkunci perlukan kenderaan: beli di **KEDAI > KENDERAAN**. Kenderaan terbaik yang kau ada akan berlabuh di kawasan air, dan kau memancing dari atasnya.
+9. Semua disimpan automatik (syiling, beg, peralatan, kenderaan, kawasan). Di browser, simpanan kekal walaupun tutup tab, kecuali guna mod incognito atau padam data laman. Nak mula semula: KEDAI > **PADAM SIMPANAN** (tekan dua kali).
 
 ### Kedai
 | Jenis | Barang (harga syiling) | Kesan |
 |---|---|---|
-| Joran | Buluh (ada) · Gentian Kaca (250) · Karbon (1500) | Jarak lontar, kuasa tarik |
-| Kekili | Lama (ada) · Spinning (200) · Baitcaster (1200) | Laju gulung, drag lebih licin |
-| Tali | Nilon 6 kg (ada) · Nilon 12 kg (150) · Sulam PE 20 kg (900) | Had tali putus |
+| Joran | Buluh (ada) · Gentian Kaca (250) · Karbon (1500) · Laut Dalam (6000) | Jarak lontar, kuasa tarik |
+| Kekili | Lama (ada) · Spinning (200) · Baitcaster (1200) · Jigging Laut (4500) | Laju gulung, drag lebih licin |
+| Tali | Nilon 6 kg (ada) · Nilon 12 kg (150) · Sulam PE 20 kg (900) · Sulam PE 40 kg (3000) | Had tali putus |
 | Mata kail | No. 10 (ada) · Tajam No. 6 (120) · Circle No. 2 (600) | Masa sentap lebih lama, ikan besar lebih kerap |
-| Umpan | Cacing (percuma) · Dedak (15/10 biji) · Udang Hidup (60/10) · Anak Ikan Hidup (150/10) | Ikan gigit lebih cepat, ikan jarang lebih kerap |
+| Umpan | Cacing (percuma) · Dedak (15/10 biji) · Udang Hidup (60/10) · Anak Ikan Hidup (150/10) · Sotong Segar (120/10) | Ikan gigit lebih cepat, ikan jarang lebih kerap |
+| Kenderaan | Jalan Kaki (ada) · Kayak (600) · Sampan Kayu (2000) · Bot Kecil (6000) · Bot Laut Dalam (15000) | Buka kawasan baru |
+
+### Kawasan
+Semua berlatarkan Semenanjung Malaysia (inspirasi dari tempat sebenar, bukan peta tepat).
+
+| Kawasan | Inspirasi | Perlu | Ikan |
+|---|---|---|---|
+| Kolam Kampung | Kolam belakang rumah | Kaki | Tilapia, Keli, Lampam Jawa, Patin, Haruan, Jelawat, Toman |
+| Sungai Tembeling | Hulu sungai di Pahang | Kaki | Lampam Sungai, Baung, Tengas, Sebarau, Kelah Merah |
+| Tasik Kenyir | Tasik empangan di Terengganu | Kayak | Tilapia, Lampam Jawa, Baung, Sebarau, Toman, Temoleh |
+| Muara Kuala Selangor | Muara berpaya bakau, pantai barat | Sampan | Belanak, Duri, Siakap, Senangin, Jenahak |
+| Pesisir Pantai Mersing | Pantai timur Johor dan pulau kecil | Bot Kecil | Kembung, Selar, Todak, Kerapu, Talang |
+| Laut Dalam Tioman | Laut China Selatan, luar Pulau Tioman | Bot Laut Dalam | Tongkol, Ikan Merah, Tenggiri, GT, Ikan Layaran |
+
+Ikan laut besar (GT sampai 40 kg, Layaran sampai 45 kg) akan putuskan tali biasa. Guna tali sulam 40 kg dan joran laut dalam.
 
 Umpan berbayar berkurang satu setiap kali ikan makan. Bila habis, tukar balik ke cacing.
 
@@ -77,28 +95,31 @@ Cara lebih laju lepas ni: hidupkan **USB debugging** kat fon (Settings > About p
 ```
 project.godot            tetapan projek (renderer Mobile, landskap)
 scenes/
-  main.tscn              scene utama: kolam, air, pemain, HUD, kawalan sentuh
+  main.tscn              scene utama: dunia, air, pemain, HUD, kawalan sentuh
   angler.tscn            watak pemain + joran + kamera
   bobber.tscn            pelampung + percikan air
 scripts/
-  core/      main.gd (data pemain, simpan automatik, tunjuk ikan), game_input.gd (kekunci + seret kamera)
-  economy/   player_data.gd (syiling, beg, peralatan), save_game.gd (simpan/baca),
+  core/      main.gd (data pemain, simpan automatik, bina kawasan, tunjuk ikan), game_input.gd (kekunci + seret kamera)
+  economy/   player_data.gd (syiling, beg, peralatan, kenderaan, kawasan), save_game.gd (simpan/baca),
              gear_item.gd, gear_catalog.gd (senarai barang kedai)
   player/    angler.gd (jalan, pusing, FPV/TPV)
   fishing/   fishing_rod.gd (logik memancing), bobber.gd, fishing_line.gd, rod_stats.gd
   fish/      fish_species.gd, fish_pool.gd, hooked_fish.gd, fish_model.gd
-  world/     pond_world.gd (jana tanah, pokok, batu, pangkalan, pondok)
-  ui/        hud.gd, touch_controls.gd, game_menu.gd (beg + kedai)
+  world/     area_world.gd (jana tanah, air, pokok, batu, pangkalan, bot ikut kawasan),
+             fishing_area.gd, area_catalog.gd (senarai kawasan)
+  ui/        hud.gd, touch_controls.gd, game_menu.gd (beg + kedai + peta)
 shaders/water.gdshader   air low-poly berombak
 data/fish/*.tres         data ikan (boleh ubah dalam Inspector)
-data/gear/*.tres         data barang kedai (joran, kekili, tali, mata kail, umpan)
+data/gear/*.tres         data barang kedai (joran, kekili, tali, mata kail, umpan, kenderaan)
+data/areas/*.tres        data kawasan (ikan, warna air, kenderaan yang perlu)
 tests/test_flow.gd       ujian automatik
 ```
 
 ### Ubah sendiri (mudah)
 - **Ikan:** buka `data/fish/` > klik fail ikan > ubah berat, kekuatan, syiling dalam panel Inspector.
 - **Barang kedai:** buka `data/gear/` > klik fail > ubah harga dan statistik. Barang baru: buat fail `.tres` baru (New Resource > GearItem) dan tambah satu baris dalam `scripts/economy/gear_catalog.gd`.
-- **Kolam:** klik node `PondWorld` dalam `main.tscn`, ubah saiz kolam / `world_seed`, tekan **Regenerate**.
+- **Kawasan:** buka `data/areas/` > klik fail > ubah senarai ikan, warna air, kenderaan yang perlu.
+- **Rupa kawasan:** klik node `World` dalam `main.tscn`, pilih kawasan dalam `Area` dan tahap kenderaan, tekan **Regenerate** untuk tengok dalam editor.
 
 ### Ikan kolam
 | Ikan | Berat (kg) | Tarikan | Agresif | Syiling/kg | Kejarangan |
@@ -115,11 +136,10 @@ tests/test_flow.gd       ujian automatik
 ```
 godot --headless --path . -s res://tests/test_flow.gd
 ```
-Ujian ni jalan, tukar kamera, lontar, sentap, tarik-tali sampai dapat ikan, jual ikan, beli barang, guna umpan, simpan/muat data, dan lontar ke darat.
+Ujian ni jalan, tukar kamera, lontar, sentap, tarik-tali sampai dapat ikan, jual ikan, beli barang, guna umpan, simpan/muat data, baca simpanan lama fasa 2, beli kenderaan, pergi ke setiap kawasan dan lontar masuk air di sana, dan lontar ke darat.
 
 ---
 
 ## Fasa seterusnya
-3. Semua kawasan (sungai, tasik, muara, pantai, laut) + kenderaan (kayak → sampan → bot kecil → bot laut dalam)
 4. Multiplayer co-op 2–4 orang
 5. Cuaca, siang-malam, bunyi, polish

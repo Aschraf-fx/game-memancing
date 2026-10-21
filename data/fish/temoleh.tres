@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_mflj6"]
+
+[resource]
+script = ExtResource("1_mflj6")
+display_name = "Temoleh"
+color = Color(0.78, 0.78, 0.7, 1)
+min_weight = 3.0
+max_weight = 20.0
+pull_strength = 45.0
+aggression = 0.4
+stamina = 26.0
+coins_per_kg = 30
+rarity = 3
+spawn_weight = 0.25

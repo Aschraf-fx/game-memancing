@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="FishingArea" load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/fishing_area.gd" id="1_xlloh"]
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="2_hokc0"]
+[ext_resource type="Resource" path="res://data/fish/tongkol.tres" id="3_whckw"]
+[ext_resource type="Resource" path="res://data/fish/ikan_merah.tres" id="4_rt2yg"]
+[ext_resource type="Resource" path="res://data/fish/tenggiri.tres" id="5_e3a71"]
+[ext_resource type="Resource" path="res://data/fish/gt.tres" id="6_tay0k"]
+[ext_resource type="Resource" path="res://data/fish/layaran.tres" id="7_xhc2x"]
+
+[resource]
+script = ExtResource("1_xlloh")
+id = "laut"
+display_name = "Laut Dalam Tioman"
+place = "Inspirasi: Laut China Selatan, luar Pulau Tioman"
+description = "Tengah laut, dalam dan biru gelap. Ikan gergasi! Perlu bot laut dalam dan peralatan kuat."
+kind = 5
+vehicle_tier = 4
+species = Array[ExtResource("2_hokc0")]([ExtResource("3_whckw"), ExtResource("4_rt2yg"), ExtResource("5_e3a71"), ExtResource("6_tay0k"), ExtResource("7_xhc2x")])
+bite_delay = Vector2(3, 10)
+water_color = Color(0.03, 0.18, 0.42, 0.92)
+fog_density = 0.003

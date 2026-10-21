@@ -1,7 +1,7 @@
-[gd_scene load_steps=28 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="Script" path="res://scripts/core/main.gd" id="1_main"]
-[ext_resource type="Script" path="res://scripts/world/pond_world.gd" id="2_world"]
+[ext_resource type="Script" path="res://scripts/world/area_world.gd" id="2_world"]
 [ext_resource type="Script" path="res://scripts/fish/fish_pool.gd" id="3_pool"]
 [ext_resource type="Shader" path="res://shaders/water.gdshader" id="4_water"]
 [ext_resource type="PackedScene" path="res://scenes/angler.tscn" id="5_angler"]
@@ -10,15 +10,7 @@
 [ext_resource type="Script" path="res://scripts/fishing/fishing_rod.gd" id="8_rod"]
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="10_hud"]
 [ext_resource type="Script" path="res://scripts/ui/touch_controls.gd" id="11_touch"]
-[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="12_species"]
-[ext_resource type="Resource" path="res://data/fish/tilapia.tres" id="13_tilapia"]
-[ext_resource type="Resource" path="res://data/fish/keli.tres" id="14_keli"]
-[ext_resource type="Resource" path="res://data/fish/lampam_jawa.tres" id="15_lampam"]
-[ext_resource type="Resource" path="res://data/fish/patin.tres" id="16_patin"]
-[ext_resource type="Resource" path="res://data/fish/haruan.tres" id="17_haruan"]
-[ext_resource type="Resource" path="res://data/fish/toman.tres" id="18_toman"]
 [ext_resource type="Script" path="res://scripts/core/game_input.gd" id="19_input"]
-[ext_resource type="Resource" path="res://data/fish/jelawat.tres" id="20_jelawat"]
 [ext_resource type="Script" path="res://scripts/ui/game_menu.gd" id="21_menu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="sky_mat"]
@@ -59,8 +51,9 @@ subdivide_depth = 30
 [sub_resource type="BoxShape3D" id="water_shape"]
 size = Vector3(58, 3, 44)
 
-[node name="Main" type="Node3D" node_paths=PackedStringArray("rod", "angler", "hud", "menu")]
+[node name="Main" type="Node3D" node_paths=PackedStringArray("world", "rod", "angler", "hud", "menu")]
 script = ExtResource("1_main")
+world = NodePath("World")
 rod = NodePath("FishingRod")
 angler = NodePath("Angler")
 hud = NodePath("HUD")
@@ -79,15 +72,16 @@ light_energy = 0.85
 shadow_enabled = true
 directional_shadow_max_distance = 60.0
 
-[node name="PondWorld" type="Node3D" parent="."]
+[node name="World" type="Node3D" parent="." node_paths=PackedStringArray("water", "environment")]
 script = ExtResource("2_world")
+water = NodePath("../Water")
+environment = NodePath("../WorldEnvironment")
 
 [node name="Water" type="Area3D" parent="."]
 collision_layer = 8
 collision_mask = 4
 monitorable = false
 script = ExtResource("3_pool")
-species = Array[ExtResource("12_species")]([ExtResource("13_tilapia"), ExtResource("14_keli"), ExtResource("15_lampam"), ExtResource("16_patin"), ExtResource("17_haruan"), ExtResource("18_toman"), ExtResource("20_jelawat")])
 
 [node name="Surface" type="MeshInstance3D" parent="Water"]
 cast_shadow = 0
