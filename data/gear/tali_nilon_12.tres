@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="GearItem" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/economy/gear_item.gd" id="1_gear"]
+
+[resource]
+script = ExtResource("1_gear")
+id = "tali_nilon_12"
+display_name = "Tali Nilon 12 kg"
+slot = 2
+price = 150
+description = "Tali nilon tebal. Tahan ikan sederhana besar."
+line_strength = 90.0

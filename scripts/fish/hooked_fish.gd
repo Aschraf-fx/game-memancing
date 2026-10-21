@@ -10,10 +10,11 @@ var _surge_timer := 0.0
 var _current_pull := 0.0
 
 
-func _init(s: FishSpecies) -> void:
+## size_bias datang dari mata kail: nilai lebih rendah = lebih kerap ikan besar.
+func _init(s: FishSpecies, size_bias := 2.2) -> void:
 	species = s
 	# Taburan condong ke saiz kecil; ikan besar jarang dapat.
-	weight = lerpf(s.min_weight, s.max_weight, pow(randf(), 2.2))
+	weight = lerpf(s.min_weight, s.max_weight, pow(randf(), size_bias))
 	var size01 := inverse_lerp(s.min_weight, s.max_weight, weight)
 	stamina_left = s.stamina * lerpf(0.8, 1.4, size01)
 
@@ -23,7 +24,7 @@ func is_exhausted() -> bool:
 
 
 func value() -> int:
-	return roundi(weight * species.coins_per_kg)
+	return species.price_for(weight)
 
 
 ## Tarikan ikan (Newton) untuk frame ini. Ikan meronta secara rawak dan

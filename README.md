@@ -3,7 +3,10 @@
 Game memancing 3D gaya **low-poly** (kartun) untuk telefon Android, berlatarkan Semenanjung Malaysia.
 Dibina dengan **Godot 4** (percuma, ringan, jalan lancar walaupun PC biasa).
 
-**Fasa 1 (sekarang):** satu kolam kampung, lontaran charge, sentap, tarik-tali dengan bar ketegangan, kamera FPV/TPV, kawalan sentuh, 6 jenis ikan kolam.
+**Main terus di browser fon:** https://aschraf-fx.github.io/game-memancing/
+
+**Fasa 1:** satu kolam kampung, lontaran charge, sentap, tarik-tali dengan bar ketegangan, kamera FPV/TPV, kawalan sentuh.
+**Fasa 2 (sekarang):** beg ikan, jual ikan dapat syiling, kedai peralatan (joran, kekili, tali, mata kail, umpan), simpan automatik. 7 jenis ikan kolam.
 
 ---
 
@@ -23,6 +26,9 @@ Dibina dengan **Godot 4** (percuma, ringan, jalan lancar walaupun PC biasa).
 | Lontar | **Tahan LONTAR**, lepas untuk lontar | Tahan Space |
 | Sentap / Gulung | **GULUNG** | Shift atau E |
 | Tukar FPV/TPV | **KAMERA** | V |
+| Beg ikan | **BEG** (kiri atas) | B |
+| Kedai | **KEDAI** (kiri atas) | K |
+| Tutup menu | **TUTUP** | Esc |
 
 ### Cara main
 1. **Tahan LONTAR** untuk charge (bar biru), lepas untuk lontar. Charge penuh = jauh tapi kurang tepat.
@@ -31,8 +37,22 @@ Dibina dengan **Godot 4** (percuma, ringan, jalan lancar walaupun PC biasa).
    - Tali tegang sangat = **putus**.
    - Tali kendur terlalu lama = **ikan lepas**.
    - Kekili akan lepaskan tali sendiri (drag) bila hampir putus.
-4. Ikan makin letih bila tali tegang. Tarik sampai dekat pangkalan untuk dapat syiling.
+4. Ikan makin letih bila tali tegang. Tarik sampai dekat pangkalan, ikan masuk **beg** (muat 20 ekor).
 5. Tak dapat apa? Tahan GULUNG masa menunggu untuk tarik pelampung balik dan lontar semula.
+6. Buka **BEG** untuk jual ikan. Harga ikut jenis ikan, berat, dan kejarangan (Biasa x1, Luar Biasa x1.5, Jarang x2.5, Sangat Jarang x4). Ikan hampir saiz maksimum dapat bonus sampai +50%.
+7. Buka **KEDAI** untuk beli peralatan. Barang baru terus dipakai. Game berhenti sekejap masa menu dibuka.
+8. Semua disimpan automatik (syiling, beg, peralatan). Di browser, simpanan kekal walaupun tutup tab, kecuali guna mod incognito atau padam data laman. Nak mula semula: KEDAI > **PADAM SIMPANAN** (tekan dua kali).
+
+### Kedai
+| Jenis | Barang (harga syiling) | Kesan |
+|---|---|---|
+| Joran | Buluh (ada) · Gentian Kaca (250) · Karbon (1500) | Jarak lontar, kuasa tarik |
+| Kekili | Lama (ada) · Spinning (200) · Baitcaster (1200) | Laju gulung, drag lebih licin |
+| Tali | Nilon 6 kg (ada) · Nilon 12 kg (150) · Sulam PE 20 kg (900) | Had tali putus |
+| Mata kail | No. 10 (ada) · Tajam No. 6 (120) · Circle No. 2 (600) | Masa sentap lebih lama, ikan besar lebih kerap |
+| Umpan | Cacing (percuma) · Dedak (15/10 biji) · Udang Hidup (60/10) · Anak Ikan Hidup (150/10) | Ikan gigit lebih cepat, ikan jarang lebih kerap |
+
+Umpan berbayar berkurang satu setiap kali ikan makan. Bila habis, tukar balik ke cacing.
 
 ---
 
@@ -61,43 +81,45 @@ scenes/
   angler.tscn            watak pemain + joran + kamera
   bobber.tscn            pelampung + percikan air
 scripts/
-  core/      main.gd (syiling, tunjuk ikan), game_input.gd (kekunci + seret kamera)
+  core/      main.gd (data pemain, simpan automatik, tunjuk ikan), game_input.gd (kekunci + seret kamera)
+  economy/   player_data.gd (syiling, beg, peralatan), save_game.gd (simpan/baca),
+             gear_item.gd, gear_catalog.gd (senarai barang kedai)
   player/    angler.gd (jalan, pusing, FPV/TPV)
   fishing/   fishing_rod.gd (logik memancing), bobber.gd, fishing_line.gd, rod_stats.gd
   fish/      fish_species.gd, fish_pool.gd, hooked_fish.gd, fish_model.gd
   world/     pond_world.gd (jana tanah, pokok, batu, pangkalan, pondok)
-  ui/        hud.gd, touch_controls.gd
+  ui/        hud.gd, touch_controls.gd, game_menu.gd (beg + kedai)
 shaders/water.gdshader   air low-poly berombak
 data/fish/*.tres         data ikan (boleh ubah dalam Inspector)
-data/rods/*.tres         data joran
+data/gear/*.tres         data barang kedai (joran, kekili, tali, mata kail, umpan)
 tests/test_flow.gd       ujian automatik
 ```
 
 ### Ubah sendiri (mudah)
 - **Ikan:** buka `data/fish/` > klik fail ikan > ubah berat, kekuatan, syiling dalam panel Inspector.
-- **Joran:** `data/rods/joran_buluh.tres` (jarak lontar, had putus tali, laju gulung).
+- **Barang kedai:** buka `data/gear/` > klik fail > ubah harga dan statistik. Barang baru: buat fail `.tres` baru (New Resource > GearItem) dan tambah satu baris dalam `scripts/economy/gear_catalog.gd`.
 - **Kolam:** klik node `PondWorld` dalam `main.tscn`, ubah saiz kolam / `world_seed`, tekan **Regenerate**.
 
 ### Ikan kolam
-| Ikan | Berat (kg) | Tarikan | Agresif | Syiling/kg | Peluang |
+| Ikan | Berat (kg) | Tarikan | Agresif | Syiling/kg | Kejarangan |
 |---|---|---|---|---|---|
-| Tilapia | 0.2–1.5 | 14 | 0.3 | 8 | tinggi |
-| Keli | 0.3–3 | 20 | 0.35 | 10 | tinggi |
-| Lampam Jawa | 0.2–1.2 | 12 | 0.5 | 9 | tinggi |
-| Patin | 1–8 | 30 | 0.45 | 14 | sederhana |
-| Haruan | 0.5–3 | 26 | 0.6 | 16 | rendah |
-| Toman | 2–10 | 38 | 0.7 | 22 | jarang |
+| Tilapia | 0.2–1.5 | 14 | 0.3 | 8 | Biasa |
+| Keli | 0.3–3 | 20 | 0.35 | 10 | Biasa |
+| Lampam Jawa | 0.2–1.2 | 12 | 0.5 | 9 | Biasa |
+| Patin | 1–8 | 30 | 0.45 | 14 | Luar Biasa |
+| Haruan | 0.5–3 | 26 | 0.6 | 16 | Luar Biasa |
+| Jelawat | 1–6 | 28 | 0.5 | 18 | Jarang |
+| Toman | 2–10 | 38 | 0.7 | 22 | Sangat Jarang |
 
 ### Ujian automatik
 ```
 godot --headless --path . -s res://tests/test_flow.gd
 ```
-Ujian ni jalan, tukar kamera, lontar, sentap, tarik-tali sampai dapat ikan, dan lontar ke darat.
+Ujian ni jalan, tukar kamera, lontar, sentap, tarik-tali sampai dapat ikan, jual ikan, beli barang, guna umpan, simpan/muat data, dan lontar ke darat.
 
 ---
 
 ## Fasa seterusnya
-2. Ekonomi: jual ikan, kedai joran/tali/umpan, simpan data
 3. Semua kawasan (sungai, tasik, muara, pantai, laut) + kenderaan (kayak → sampan → bot kecil → bot laut dalam)
 4. Multiplayer co-op 2–4 orang
 5. Cuaca, siang-malam, bunyi, polish

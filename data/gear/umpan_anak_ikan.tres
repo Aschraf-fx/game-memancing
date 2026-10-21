@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="GearItem" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/economy/gear_item.gd" id="1_gear"]
+
+[resource]
+script = ExtResource("1_gear")
+id = "umpan_anak_ikan"
+display_name = "Anak Ikan Hidup"
+slot = 4
+price = 150
+description = "Umpan hidup untuk ikan pemangsa macam toman."
+bite_mult = 1.1
+rare_luck = 3.0
+pack_size = 10

@@ -12,4 +12,5 @@ pull_strength = 14.0
 aggression = 0.3
 stamina = 8.0
 coins_per_kg = 8
+rarity = 0
 spawn_weight = 4.0

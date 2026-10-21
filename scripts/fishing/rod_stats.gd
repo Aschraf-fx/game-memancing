@@ -1,6 +1,7 @@
 class_name RodStats
 extends Resource
-## Statistik joran + tali + kekili. Kedai (Fasa 2) akan jual variasi fail ni.
+## Gabungan statistik semua peralatan yang sedang dipakai (joran + kekili +
+## tali + mata kail + umpan). Dibina oleh PlayerData.build_stats().
 
 @export var display_name := "Joran Buluh"
 ## Jarak lontaran maksimum (meter).
@@ -15,3 +16,11 @@ extends Resource
 @export var reel_force := 35.0
 ## Kekili mula lepaskan tali bila ketegangan melebihi nisbah ini.
 @export_range(0.5, 1.0) var drag_threshold := 0.85
+## Masa (saat) untuk tekan GULUNG selepas pelampung tenggelam.
+@export var strike_window := 1.1
+## Taburan saiz ikan: lebih rendah = lebih kerap ikan besar.
+@export var size_bias := 2.2
+## Darab masa menunggu gigitan (< 1 = lebih cepat).
+@export var bite_mult := 1.0
+## Peluang ikan jarang (1 = biasa).
+@export var rare_luck := 1.0

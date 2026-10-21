@@ -1,5 +1,6 @@
 extends SceneTree
-## Ujian automatik ringkas: jalan, tukar kamera, lontar, sentap, tarik-tali.
+## Ujian automatik ringkas: jalan, tukar kamera, lontar, sentap, tarik-tali,
+## beg ikan, jual, kedai, umpan dan simpan/muat data.
 ## Jalankan: godot --headless --path . -s res://tests/test_flow.gd
 
 var main: Node3D
@@ -10,6 +11,8 @@ var failures := 0
 
 func _initialize() -> void:
 	seed(20261021)  # ikan sama setiap kali supaya ujian stabil
+	SaveGame.path = "user://ujian_simpanan.json"  # jangan kacau simpanan sebenar
+	SaveGame.erase()
 	main = load("res://scenes/main.tscn").instantiate()
 	root.add_child(main)
 	rod = main.get_node("FishingRod")
@@ -20,7 +23,9 @@ func _initialize() -> void:
 func _run() -> void:
 	await _frames(30)
 	_check(angler.is_on_floor(), "pemain berdiri atas pangkalan")
-	_check(main.get_node("Water").species.size() == 6, "kolam ada 6 spesies")
+	_check(main.get_node("Water").species.size() == 7, "kolam ada 7 spesies")
+	_check(rod.rod.max_cast_distance == 22.0, "mula dengan Joran Buluh")
+	_check(main.data.coins == PlayerData.START_COINS, "syiling permulaan")
 
 	var start := angler.global_position
 	Input.action_press("move_forward")
@@ -92,8 +97,9 @@ func _run() -> void:
 		frames += 1
 	Input.action_release("reel")
 	_check(rod.state == FishingRod.State.IDLE, "tarik-tali tamat")
-	print("  keputusan: %s selepas %.1f s, syiling=%d" % ["DAPAT" if got[0] else "terlepas", frames / 60.0, main.coins])
+	print("  keputusan: %s selepas %.1f s" % ["DAPAT" if got[0] else "terlepas", frames / 60.0])
 	_check(got[0], "strategi gulung-lepas dapat ikan")
+	await _economy()
 
 	# Lontar ke darat (pusing belakang) mesti tarik balik.
 	angler.rotate_y(PI)
@@ -103,8 +109,102 @@ func _run() -> void:
 	await _until(func(): return rod.state == FishingRod.State.IDLE, 600)
 	_check(rod.state == FishingRod.State.IDLE, "lontar ke darat, pelampung digulung balik")
 
+	SaveGame.erase()
 	print("SELESAI: %d gagal" % failures)
 	quit(1 if failures else 0)
+
+
+func _economy() -> void:
+	var data: PlayerData = main.data
+	var menu: GameMenu = main.get_node("Menu")
+	_check(data.bag.size() == 1, "ikan masuk beg")
+	var fish: Dictionary = data.bag[0]
+	print("  dalam beg: %s %.2f kg = %d syiling" % [fish.name, fish.kg, fish.value])
+	_check(fish.value > 0, "ikan ada harga")
+
+	# Harga: lebih berat dan lebih jarang = lebih mahal.
+	var tilapia: FishSpecies = load("res://data/fish/tilapia.tres")
+	var toman: FishSpecies = load("res://data/fish/toman.tres")
+	_check(tilapia.price_for(1.4) > tilapia.price_for(0.4), "ikan berat lebih mahal")
+	_check(toman.price_for(3.0) > toman.coins_per_kg * 3.0 * 3.9, "ikan sangat jarang dapat gandaan harga")
+
+	# Umpan jarang buat ikan jarang lebih kerap.
+	var pool: FishPool = main.get_node("Water")
+	var count := func(luck: float) -> int:
+		var n := 0
+		for i in 3000:
+			if pool.roll_species(luck).rarity >= 2:
+				n += 1
+		return n
+	var plain: int = count.call(1.0)
+	var lucky: int = count.call(3.0)
+	print("  ikan jarang per 3000: cacing=%d, umpan jarang=%d" % [plain, lucky])
+	_check(lucky > plain * 2, "umpan jarang tambah peluang ikan jarang")
+
+	# Menu buka = game pause. Tak boleh buka masa memancing.
+	menu.open(GameMenu.Tab.BAG)
+	await _frames(2)
+	_check(menu.is_open() and paused, "buka beg, game pause")
+	var coins0 := data.coins
+	menu._sell(0)
+	await _frames(2)
+	_check(data.bag.is_empty() and data.coins == coins0 + fish.value, "jual ikan dapat syiling")
+
+	# Kedai: syiling tak cukup, kemudian cukup.
+	var gentian := GearCatalog.find("joran_gentian")
+	data.coins = 10
+	menu._buy(gentian)
+	_check(not data.owns(gentian), "tak boleh beli kalau syiling tak cukup")
+	data.coins = 1000
+	menu._buy(gentian)
+	_check(data.owns(gentian) and data.coins == 1000 - gentian.price, "beli joran gentian")
+	_check(rod.rod.max_cast_distance == gentian.cast_distance, "joran baru terus dipakai (lontar %d m)" % rod.rod.max_cast_distance)
+	menu._buy(gentian)
+	_check(data.coins == 1000 - gentian.price, "tak boleh beli joran sama dua kali")
+	menu._buy(GearCatalog.find("tali_nilon_12"))
+	_check(rod.rod.line_break_tension == 90.0, "tali baru tambah had putus")
+
+	var dedak := GearCatalog.find("umpan_dedak")
+	menu._buy(dedak)
+	_check(data.bait_count() == dedak.pack_size and rod.rod.bite_mult < 1.0, "beli dan pakai umpan dedak")
+	for i in dedak.pack_size - 1:
+		data.use_bait()
+	_check(data.bait_count() == 1, "umpan berkurang bila ikan makan")
+	data.use_bait()
+	_check(data.equipped_item(GearItem.Slot.UMPAN).id == "umpan_cacing", "umpan habis, tukar balik ke cacing")
+
+	for slot in GearItem.Slot.values():
+		menu.shop_slot = slot
+		menu._switch(GameMenu.Tab.SHOP)
+		await process_frame
+	menu.close()
+	await _frames(2)
+	_check(not paused, "tutup menu, game sambung")
+
+	# Simpan dan muat semula.
+	var gold := data.coins
+	var loaded := SaveGame.load_data()
+	_check(loaded.coins == gold, "simpanan: syiling sama")
+	_check(loaded.owns(gentian) and loaded.equipped_item(GearItem.Slot.JORAN) == gentian, "simpanan: joran dipakai sama")
+	_check(loaded.build_stats().line_break_tension == 90.0, "simpanan: statistik sama")
+	var broken := FileAccess.open(SaveGame.path, FileAccess.WRITE)
+	broken.store_string("{rosak")
+	broken.close()
+	_check(SaveGame.load_data().coins == PlayerData.START_COINS, "fail rosak, mula baru tanpa crash")
+	SaveGame.save(data)
+
+	menu.open(GameMenu.Tab.SHOP)
+	menu._reset()
+	menu._reset()
+	_check(main.data.coins == PlayerData.START_COINS and main.data.owned.size() == 5, "padam simpanan, mula baru")
+	menu.close()
+
+	# Tak boleh buka kedai masa ikan sedang menggigit.
+	rod.state = FishingRod.State.BITING
+	menu.open(GameMenu.Tab.SHOP)
+	_check(not menu.is_open(), "kedai tak boleh buka masa memancing")
+	rod._enter(FishingRod.State.IDLE)
+	await _frames(2)
 
 
 func _touch(index: int, pos: Vector2, pressed: bool) -> void:

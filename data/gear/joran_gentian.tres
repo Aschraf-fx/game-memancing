@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="GearItem" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/economy/gear_item.gd" id="1_gear"]
+
+[resource]
+script = ExtResource("1_gear")
+id = "joran_gentian"
+display_name = "Joran Gentian Kaca"
+slot = 0
+price = 250
+description = "Joran fiberglass kedai pancing. Lontar lebih jauh, lebih kuat."
+cast_distance = 30.0
+charge_time = 1.1
+power = 45.0

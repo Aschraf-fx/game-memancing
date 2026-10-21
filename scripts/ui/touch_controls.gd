@@ -78,6 +78,18 @@ func _input(raw_event: InputEvent) -> void:
 				GameInput.look_delta += step * look_sensitivity
 
 
+## Lepaskan semua butang dan joystick (dipanggil sebelum menu dibuka,
+## sebab kawalan ni berhenti terima sentuhan masa game pause).
+func release_all() -> void:
+	for role in _fingers.values():
+		if role in BUTTONS:
+			Input.action_release(role)
+	_fingers.clear()
+	_last_pos.clear()
+	_update_stick(_layout()["stick"][0])
+	queue_redraw()
+
+
 func _hit(pos: Vector2) -> String:
 	var lay := _layout()
 	for role in BUTTONS:

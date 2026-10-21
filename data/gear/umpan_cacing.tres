@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="GearItem" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/economy/gear_item.gd" id="1_gear"]
+
+[resource]
+script = ExtResource("1_gear")
+id = "umpan_cacing"
+display_name = "Cacing Tanah"
+slot = 4
+price = 0
+description = "Gali sendiri belakang rumah. Percuma, tak habis."
+bite_mult = 1.0
+rare_luck = 1.0
+pack_size = 0

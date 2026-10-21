@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="GearItem" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/economy/gear_item.gd" id="1_gear"]
+
+[resource]
+script = ExtResource("1_gear")
+id = "umpan_dedak"
+display_name = "Umpan Dedak"
+slot = 4
+price = 15
+description = "Dedak campur esen. Ikan cepat datang makan."
+bite_mult = 0.6
+rare_luck = 1.0
+pack_size = 10

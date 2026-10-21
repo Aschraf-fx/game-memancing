@@ -13,6 +13,8 @@ const KEYS := {
 	"cast": [KEY_SPACE],
 	"reel": [KEY_SHIFT, KEY_E],
 	"toggle_camera": [KEY_V],
+	"open_bag": [KEY_B],
+	"open_shop": [KEY_K],
 }
 
 ## Seretan kamera (piksel) yang terkumpul sejak kali terakhir dibaca.
