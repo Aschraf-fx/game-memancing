@@ -7,12 +7,15 @@ const ITEMS: Array[GearItem] = [
 	preload("res://data/gear/joran_buluh.tres"),
 	preload("res://data/gear/joran_gentian.tres"),
 	preload("res://data/gear/joran_karbon.tres"),
+	preload("res://data/gear/joran_laut.tres"),
 	preload("res://data/gear/kekili_lama.tres"),
 	preload("res://data/gear/kekili_spinning.tres"),
 	preload("res://data/gear/kekili_baitcaster.tres"),
+	preload("res://data/gear/kekili_laut.tres"),
 	preload("res://data/gear/tali_nilon_6.tres"),
 	preload("res://data/gear/tali_nilon_12.tres"),
 	preload("res://data/gear/tali_sulam_20.tres"),
+	preload("res://data/gear/tali_sulam_40.tres"),
 	preload("res://data/gear/kail_10.tres"),
 	preload("res://data/gear/kail_tajam_6.tres"),
 	preload("res://data/gear/kail_circle_2.tres"),
@@ -20,6 +23,12 @@ const ITEMS: Array[GearItem] = [
 	preload("res://data/gear/umpan_dedak.tres"),
 	preload("res://data/gear/umpan_udang.tres"),
 	preload("res://data/gear/umpan_anak_ikan.tres"),
+	preload("res://data/gear/umpan_sotong.tres"),
+	preload("res://data/gear/kaki.tres"),
+	preload("res://data/gear/kayak.tres"),
+	preload("res://data/gear/sampan.tres"),
+	preload("res://data/gear/bot_kecil.tres"),
+	preload("res://data/gear/bot_laut.tres"),
 ]
 
 

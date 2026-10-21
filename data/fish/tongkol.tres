@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_dvnns"]
+
+[resource]
+script = ExtResource("1_dvnns")
+display_name = "Tongkol"
+color = Color(0.28, 0.4, 0.62, 1)
+min_weight = 1.0
+max_weight = 6.0
+pull_strength = 34.0
+aggression = 0.6
+stamina = 16.0
+coins_per_kg = 20
+rarity = 0
+spawn_weight = 3.0

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_3v5dd"]
+
+[resource]
+script = ExtResource("1_3v5dd")
+display_name = "Siakap"
+color = Color(0.74, 0.76, 0.72, 1)
+min_weight = 1.0
+max_weight = 10.0
+pull_strength = 40.0
+aggression = 0.65
+stamina = 20.0
+coins_per_kg = 24
+rarity = 1
+spawn_weight = 1.4

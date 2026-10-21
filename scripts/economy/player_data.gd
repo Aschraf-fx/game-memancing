@@ -1,6 +1,6 @@
 class_name PlayerData
 extends RefCounted
-## Semua kemajuan pemain: syiling, beg ikan, peralatan dan rekod.
+## Semua kemajuan pemain: syiling, beg ikan, peralatan, kenderaan, kawasan dan rekod.
 ## Setiap perubahan pancar "changed", dan Main akan simpan ke fail.
 
 signal changed
@@ -19,6 +19,8 @@ var equipped := {}
 var bait_left := {}
 ## id ikan -> berat paling berat (kg).
 var records := {}
+## id kawasan memancing sekarang.
+var area := AreaCatalog.first().id
 
 
 func _init() -> void:
@@ -81,7 +83,49 @@ func owns(item: GearItem) -> bool:
 
 
 func is_equipped(item: GearItem) -> bool:
+	if item.slot == GearItem.Slot.KENDERAAN:
+		return vehicle() == item
 	return equipped.get(item.slot) == item.id
+
+
+## Tahap kenderaan terbaik yang dimiliki (0 = jalan kaki).
+func vehicle_tier() -> int:
+	var best := 0
+	for item in GearCatalog.in_slot(GearItem.Slot.KENDERAAN):
+		if owns(item):
+			best = maxi(best, item.tier)
+	return best
+
+
+## Kenderaan terbaik yang dimiliki.
+func vehicle() -> GearItem:
+	var best := GearCatalog.starter(GearItem.Slot.KENDERAAN)
+	for item in GearCatalog.in_slot(GearItem.Slot.KENDERAAN):
+		if owns(item) and item.tier > best.tier:
+			best = item
+	return best
+
+
+## Kenderaan yang tahapnya sama atau lebih rendah dari yang dah ada tak perlu dibeli.
+func vehicle_not_needed(item: GearItem) -> bool:
+	return item.slot == GearItem.Slot.KENDERAAN and item.tier <= vehicle_tier()
+
+
+func can_visit(a: FishingArea) -> bool:
+	return a.vehicle_tier <= vehicle_tier()
+
+
+func current_area() -> FishingArea:
+	return AreaCatalog.find(area)
+
+
+## Pergi ke kawasan lain. Pulangkan false kalau belum ada kenderaan yang sesuai.
+func travel(a: FishingArea) -> bool:
+	if not can_visit(a):
+		return false
+	area = a.id
+	changed.emit()
+	return true
 
 
 ## Beli barang. Umpan boleh dibeli berulang kali (tambah satu pek).
@@ -89,6 +133,8 @@ func buy(item: GearItem) -> bool:
 	if coins < item.price:
 		return false
 	if item.pack_size == 0 and owns(item):
+		return false
+	if vehicle_not_needed(item):
 		return false
 	coins -= item.price
 	if not owns(item):
@@ -159,6 +205,7 @@ func to_dict() -> Dictionary:
 		"dipakai": eq,
 		"umpan": bait_left,
 		"rekod": records,
+		"kawasan": area,
 	}
 
 
@@ -188,4 +235,8 @@ static func from_dict(d: Dictionary) -> PlayerData:
 	var recs: Dictionary = d.get("rekod", {})
 	for id in recs:
 		p.records[str(id)] = float(recs[id])
+	# Simpanan fasa 2 tiada "kawasan": mula di kolam.
+	var a := AreaCatalog.find(str(d.get("kawasan", "")))
+	if a and p.can_visit(a):
+		p.area = a.id
 	return p

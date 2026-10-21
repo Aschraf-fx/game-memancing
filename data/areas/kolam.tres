@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="FishingArea" load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/fishing_area.gd" id="1_t6xbj"]
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="2_ufd37"]
+[ext_resource type="Resource" path="res://data/fish/tilapia.tres" id="3_kgqye"]
+[ext_resource type="Resource" path="res://data/fish/keli.tres" id="4_ytl6t"]
+[ext_resource type="Resource" path="res://data/fish/lampam_jawa.tres" id="5_k4kbp"]
+[ext_resource type="Resource" path="res://data/fish/patin.tres" id="6_27smn"]
+[ext_resource type="Resource" path="res://data/fish/haruan.tres" id="7_rsf1u"]
+[ext_resource type="Resource" path="res://data/fish/toman.tres" id="8_1084b"]
+[ext_resource type="Resource" path="res://data/fish/jelawat.tres" id="9_1h0h2"]
+
+[resource]
+script = ExtResource("1_t6xbj")
+id = "kolam"
+display_name = "Kolam Kampung"
+place = "Kolam belakang rumah di kampung"
+description = "Air tenang, ikan air tawar biasa. Tempat belajar memancing."
+kind = 0
+vehicle_tier = 0
+species = Array[ExtResource("2_ufd37")]([ExtResource("3_kgqye"), ExtResource("4_ytl6t"), ExtResource("5_k4kbp"), ExtResource("6_27smn"), ExtResource("7_rsf1u"), ExtResource("8_1084b"), ExtResource("9_1h0h2")])
+bite_delay = Vector2(3, 10)
+water_color = Color(0.07, 0.3, 0.34, 0.88)
+fog_density = 0.0015

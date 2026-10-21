@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="FishingArea" load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/fishing_area.gd" id="1_jvv11"]
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="2_l0p7o"]
+[ext_resource type="Resource" path="res://data/fish/lampam_sungai.tres" id="3_wtpu1"]
+[ext_resource type="Resource" path="res://data/fish/baung.tres" id="4_m8wrl"]
+[ext_resource type="Resource" path="res://data/fish/tengas.tres" id="5_jxkhk"]
+[ext_resource type="Resource" path="res://data/fish/sebarau.tres" id="6_kgxbk"]
+[ext_resource type="Resource" path="res://data/fish/kelah.tres" id="7_jqym5"]
+
+[resource]
+script = ExtResource("1_jvv11")
+id = "sungai"
+display_name = "Sungai Tembeling"
+place = "Inspirasi: hulu sungai di Pahang"
+description = "Air deras berbatu dalam hutan hujan. Sebarau dan kelah suka air jernih."
+kind = 1
+vehicle_tier = 0
+species = Array[ExtResource("2_l0p7o")]([ExtResource("3_wtpu1"), ExtResource("4_m8wrl"), ExtResource("5_jxkhk"), ExtResource("6_kgxbk"), ExtResource("7_jqym5")])
+bite_delay = Vector2(3, 9)
+water_color = Color(0.2, 0.32, 0.2, 0.9)
+fog_density = 0.002

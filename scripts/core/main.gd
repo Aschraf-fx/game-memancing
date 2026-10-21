@@ -1,8 +1,9 @@
 extends Node3D
 ## Sambung semua bahagian: data pemain (syiling, beg, peralatan), simpan
-## automatik, tunjuk ikan yang dapat, dan selamatkan pemain kalau terjatuh
-## dalam kolam.
+## automatik, bina kawasan memancing, tunjuk ikan yang dapat, dan selamatkan
+## pemain kalau terjatuh dalam air.
 
+@export var world: AreaWorld
 @export var rod: FishingRod
 @export var angler: Angler
 @export var hud: HUD
@@ -10,11 +11,12 @@ extends Node3D
 
 var data: PlayerData
 
-var _spawn: Transform3D
+## Kawasan dan kenderaan yang sedang dibina (bina semula bila berubah).
+var _built_area := ""
+var _built_tier := -1
 
 
 func _ready() -> void:
-	_spawn = angler.global_transform
 	rod.caught.connect(_on_caught)
 	rod.bait_taken.connect(_on_bait_taken)
 	menu.reset_requested.connect(reset_progress)
@@ -31,6 +33,7 @@ func reset_progress() -> void:
 func _use_data(d: PlayerData) -> void:
 	data = d
 	data.changed.connect(_on_data_changed)
+	_built_area = ""
 	menu.setup(data)
 	_apply()
 
@@ -43,7 +46,31 @@ func _on_data_changed() -> void:
 
 func _apply() -> void:
 	rod.rod = data.build_stats()
+	_build_area()
 	hud.refresh(data)
+
+
+## Bina kawasan bila pemain pergi tempat lain, atau beli bot baru di kawasan air.
+func _build_area() -> void:
+	var area := data.current_area()
+	var tier := data.vehicle_tier()
+	if area.id == _built_area and (area.vehicle_tier == 0 or tier == _built_tier):
+		return
+	var arrived := area.id != _built_area
+	_built_area = area.id
+	_built_tier = tier
+	rod.reset()
+	world.build(area, tier)
+	_respawn()
+	if arrived:
+		var how := "" if area.vehicle_tier == 0 else " dengan %s" % data.vehicle().display_name
+		hud.show_message("Tiba di %s%s" % [area.display_name, how])
+
+
+func _respawn() -> void:
+	angler.global_transform = world.spawn
+	angler.velocity = Vector3.ZERO
+	angler.reset_physics_interpolation()
 
 
 func _notification(what: int) -> void:
@@ -53,10 +80,8 @@ func _notification(what: int) -> void:
 
 func _physics_process(_delta: float) -> void:
 	if angler.global_position.y < -1.0:
-		angler.global_transform = _spawn
-		angler.velocity = Vector3.ZERO
-		angler.reset_physics_interpolation()
-		hud.show_message("Eh, jangan terjun kolam!")
+		_respawn()
+		hud.show_message("Eh, jangan terjun air!")
 
 
 func _on_bait_taken() -> void:

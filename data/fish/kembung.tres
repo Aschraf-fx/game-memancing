@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_oh84c"]
+
+[resource]
+script = ExtResource("1_oh84c")
+display_name = "Kembung"
+color = Color(0.42, 0.6, 0.72, 1)
+min_weight = 0.1
+max_weight = 0.6
+pull_strength = 10.0
+aggression = 0.5
+stamina = 6.0
+coins_per_kg = 18
+rarity = 0
+spawn_weight = 3.5

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="GearItem" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/economy/gear_item.gd" id="1_6pakn"]
+
+[resource]
+script = ExtResource("1_6pakn")
+id = "kekili_laut"
+display_name = "Kekili Jigging Laut"
+slot = 1
+price = 4500
+description = "Kekili besar tahan air masin. Drag paling kuat."
+reel_speed = 3.0
+drag_threshold = 0.94

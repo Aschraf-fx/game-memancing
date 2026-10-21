@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_jr4xv"]
+
+[resource]
+script = ExtResource("1_jr4xv")
+display_name = "Baung"
+color = Color(0.46, 0.42, 0.36, 1)
+min_weight = 0.5
+max_weight = 4.0
+pull_strength = 24.0
+aggression = 0.4
+stamina = 13.0
+coins_per_kg = 14
+rarity = 0
+spawn_weight = 2.5

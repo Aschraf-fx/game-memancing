@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_fgdrx"]
+
+[resource]
+script = ExtResource("1_fgdrx")
+display_name = "Jenahak"
+color = Color(0.8, 0.34, 0.24, 1)
+min_weight = 1.0
+max_weight = 8.0
+pull_strength = 50.0
+aggression = 0.8
+stamina = 20.0
+coins_per_kg = 34
+rarity = 3
+spawn_weight = 0.3

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_eve6d"]
+
+[resource]
+script = ExtResource("1_eve6d")
+display_name = "Todak"
+color = Color(0.5, 0.74, 0.76, 1)
+min_weight = 0.5
+max_weight = 3.0
+pull_strength = 26.0
+aggression = 0.7
+stamina = 12.0
+coins_per_kg = 18
+rarity = 1
+spawn_weight = 1.5

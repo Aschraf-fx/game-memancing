@@ -1,6 +1,6 @@
 extends SceneTree
 ## Ujian automatik ringkas: jalan, tukar kamera, lontar, sentap, tarik-tali,
-## beg ikan, jual, kedai, umpan dan simpan/muat data.
+## beg ikan, jual, kedai, umpan, simpan/muat data, kenderaan dan semua kawasan.
 ## Jalankan: godot --headless --path . -s res://tests/test_flow.gd
 
 var main: Node3D
@@ -100,6 +100,7 @@ func _run() -> void:
 	print("  keputusan: %s selepas %.1f s" % ["DAPAT" if got[0] else "terlepas", frames / 60.0])
 	_check(got[0], "strategi gulung-lepas dapat ikan")
 	await _economy()
+	await _areas()
 
 	# Lontar ke darat (pusing belakang) mesti tarik balik.
 	angler.rotate_y(PI)
@@ -196,7 +197,7 @@ func _economy() -> void:
 	menu.open(GameMenu.Tab.SHOP)
 	menu._reset()
 	menu._reset()
-	_check(main.data.coins == PlayerData.START_COINS and main.data.owned.size() == 5, "padam simpanan, mula baru")
+	_check(main.data.coins == PlayerData.START_COINS and main.data.owned.size() == 6, "padam simpanan, mula baru")
 	menu.close()
 
 	# Tak boleh buka kedai masa ikan sedang menggigit.
@@ -205,6 +206,72 @@ func _economy() -> void:
 	_check(not menu.is_open(), "kedai tak boleh buka masa memancing")
 	rod._enter(FishingRod.State.IDLE)
 	await _frames(2)
+
+
+func _areas() -> void:
+	var data: PlayerData = main.data
+	var menu: GameMenu = main.get_node("Menu")
+	var world: AreaWorld = main.get_node("World")
+	var pool: FishPool = main.get_node("Water")
+	_check(AreaCatalog.all().size() == 6, "ada 6 kawasan")
+	_check(not data.travel(AreaCatalog.find("tasik")), "tasik berkunci kalau tiada kayak")
+
+	# Simpanan fasa 2 (tiada kenderaan dan kawasan) masih boleh dibaca.
+	var old := PlayerData.from_dict({
+		"versi": 1, "syiling": 321, "beg": [], "umpan": {}, "rekod": {"haruan": 1.2},
+		"barang": ["joran_buluh", "joran_gentian"], "dipakai": {"Joran": "joran_gentian"},
+	})
+	_check(old.coins == 321 and old.area == "kolam" and old.vehicle_tier() == 0
+		and old.owns(GearCatalog.find("kaki")) and old.equipped_item(GearItem.Slot.JORAN).id == "joran_gentian",
+		"simpanan lama fasa 2 masih boleh dibaca")
+
+	data.coins = 100000
+	menu.open(GameMenu.Tab.SHOP)
+	menu.shop_slot = GearItem.Slot.KENDERAAN
+	menu._switch(GameMenu.Tab.SHOP)
+	menu._buy(GearCatalog.find("sampan"))
+	_check(data.vehicle_tier() == 2, "beli sampan terus (langkau kayak)")
+	var coins := data.coins
+	menu._buy(GearCatalog.find("kayak"))
+	_check(data.coins == coins and not data.owns(GearCatalog.find("kayak")), "tak perlu beli kayak bila dah ada sampan")
+	menu._switch(GameMenu.Tab.MAP)
+	await process_frame
+	menu.close()
+
+	var vehicles := GearCatalog.in_slot(GearItem.Slot.KENDERAAN)
+	for area in AreaCatalog.all().slice(1) + [AreaCatalog.first()]:
+		if not data.can_visit(area):
+			menu.open(GameMenu.Tab.SHOP)
+			menu._buy(vehicles[area.vehicle_tier])
+			menu.close()
+		menu.open(GameMenu.Tab.MAP)
+		menu._go(area)
+		await _frames(15)
+		_check(not menu.is_open() and world.area == area and pool.species == area.species,
+			"%s: sampai, %d jenis ikan" % [area.display_name, pool.species.size()])
+		_check(angler.is_on_floor(), "%s: pemain berdiri (y=%.2f)" % [area.display_name, angler.global_position.y])
+		print("    objek 3D: %d" % world.find_children("*", "MeshInstance3D", true, false).size())
+
+		Input.action_press("cast")
+		await _frames(40)
+		Input.action_release("cast")
+		await _frames(2)
+		await _until(func(): return rod.state != FishingRod.State.FLYING, 300)
+		_check(rod.state == FishingRod.State.WAITING, "%s: lontar masuk air (state=%s)" % [area.display_name, FishingRod.State.keys()[rod.state]])
+		rod._timer = 0.05
+		await _until(func(): return rod.state == FishingRod.State.BITING, 30)
+		_check(rod.fish != null and rod.fish.species in area.species, "%s: ikan tempatan menggigit (%s)" % [
+			area.display_name, rod.fish.species.display_name if rod.fish else "-"])
+		rod.reset()
+		await _frames(2)
+
+	_check(data.area == "kolam" and data.vehicle_tier() == 4, "balik ke kolam dengan bot laut dalam")
+	var loaded := SaveGame.load_data()
+	_check(loaded.area == "kolam" and loaded.vehicle_tier() == 4, "simpanan: kawasan dan kenderaan sama")
+	data.travel(AreaCatalog.find("laut"))
+	_check(SaveGame.load_data().area == "laut", "simpanan: kawasan laut disimpan")
+	data.travel(AreaCatalog.first())
+	await _frames(10)
 
 
 func _touch(index: int, pos: Vector2, pressed: bool) -> void:

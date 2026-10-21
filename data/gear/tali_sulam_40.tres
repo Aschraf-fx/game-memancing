@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="GearItem" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/economy/gear_item.gd" id="1_xlnem"]
+
+[resource]
+script = ExtResource("1_xlnem")
+id = "tali_sulam_40"
+display_name = "Tali Sulam PE 40 kg"
+slot = 2
+price = 3000
+description = "Tali sulam tebal untuk laut dalam."
+line_strength = 240.0
