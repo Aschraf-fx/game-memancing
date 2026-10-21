@@ -1,81 +1,103 @@
-# Game Memancing (Fasa 1: Prototaip)
+# Game Memancing
 
-Game memancing realistik untuk telefon (Android dulu), latar Semenanjung Malaysia.
-Fasa 1 ada satu kolam, lontaran charge, mini-game ketegangan tali, kamera FPV/TPV dan kawalan sentuh.
+Game memancing 3D gaya **low-poly** (kartun) untuk telefon Android, berlatarkan Semenanjung Malaysia.
+Dibina dengan **Godot 4** (percuma, ringan, jalan lancar walaupun PC biasa).
 
-## Keperluan
-- **Unity 6 LTS** (6000.0.x) dengan modul Android Build Support
-- Template projek: **Universal 3D (URP)**
-- Package: TextMeshPro (dah ada dalam uGUI), Cinemachine tak perlu
+**Fasa 1 (sekarang):** satu kolam kampung, lontaran charge, sentap, tarik-tali dengan bar ketegangan, kamera FPV/TPV, kawalan sentuh, 6 jenis ikan kolam.
 
-## Setup projek (sekali sahaja)
-1. Buat projek baru dalam Unity Hub guna template *Universal 3D*, kemudian salin folder `Assets/Scripts` dari repo ni ke dalam projek.
-2. **Edit > Project Settings > Player > Other Settings > Active Input Handling = Both** (skrip guna Input lama untuk uji papan kekunci dalam Editor; sentuhan guna EventSystem).
-3. **File > Build Profiles > Android > Switch Platform.** Orientation: Landscape Left.
-4. Kualiti mobile (realistik tapi lancar 60fps):
-   - Guna aset `URP-Balanced` atau `Mobile_RPAsset`; hidupkan **HDR**, **MSAA 2x**, **Soft Shadows**, jarak bayang 40–60 m, 2 cascade.
-   - Post-processing (Volume global): Tonemapping ACES, Bloom lembut, Color Adjustments sikit, Vignette rendah. Elak SSAO berat; guna *Screen Space Ambient Occlusion* mod *Low* sahaja kalau peranti mampu.
-   - Lighting: Directional Light (matahari tropika, suhu ~5600K, sudut rendah untuk pagi/petang), bake Lightmap untuk objek statik, Skybox HDRI (Poly Haven, lesen CC0).
+---
 
-## Susun scene kolam (`Scenes/Kolam.unity`)
-| Objek | Komponen | Nota |
+## Bahagian A: Pasang Godot dan main di PC (±10 minit)
+
+1. Pergi ke **https://godotengine.org/download**, pilih sistem PC kau (Windows/Mac/Linux), download versi **Godot Engine (Standard)** 4.4 atau lebih baru. *Jangan* ambil versi ".NET".
+2. Fail tu zip. Extract ke mana-mana folder (contoh `C:\Godot`). Tak perlu install, terus klik dua kali `Godot_v4.x-stable_win64.exe`.
+3. Download projek ni: dalam GitHub, tekan butang hijau **Code > Download ZIP**, kemudian extract (contoh ke `Documents\game-memancing`).
+4. Dalam Godot (Project Manager), tekan **Import**, pilih fail `project.godot` dalam folder tadi, tekan **Import & Edit**.
+5. Tunggu Godot siap import (kali pertama je lambat sikit). Tekan butang **▶ (F5)** kat atas kanan untuk main.
+
+### Kawalan
+| Aksi | Fon | PC |
 |---|---|---|
-| `Terrain` | Terrain | Tebing kolam, tekstur tanah merah/rumput (Poly Haven / Quixel Megascans percuma untuk Unity). Tambah pokok kelapa, pisang, rumput panjang. |
-| `Air` | Mesh plane + **BoxCollider (Is Trigger)** + `FishPool` | Collider kotak setebal 3 m, **bahagian atas = paras air**. Letak spesies ikan dalam senarai. |
-| `Pemain` | CharacterController + `AnglerController` | Layer `Player`. Anak: model, `Head` (empty pada paras mata ~1.65 m), `Joran` dengan anak `RodTip`. |
-| `Main Camera` | `AnglerCamera` | `collisionMask` = semua kecuali `Player` dan `Water`. |
-| `Pelampung` | Rigidbody (mass 0.05, Interpolate, Continuous) + SphereCollider kecil + `Bobber` | Layer `Bobber`. Jangan jadikan anak pemain. |
-| `Tali` | LineRenderer (lebar 0.004, bahan Unlit putih separa lutsinar) + `FishingLine` | |
-| `Sistem` | `MobileInput`, `FishingRod`, `CatchLog` | Isi semua rujukan dalam Inspector. |
-| `Canvas` | `FishingHUD` | Lihat bahagian UI di bawah. |
+| Berjalan | Joystick kiri bawah | W A S D |
+| Pusing kamera | Seret jari di separuh kanan skrin | Klik kiri + seret di kanan skrin, atau tahan klik kanan |
+| Lontar | **Tahan LONTAR**, lepas untuk lontar | Tahan Space |
+| Sentap / Gulung | **GULUNG** | Shift atau E |
+| Tukar FPV/TPV | **KAMERA** | V |
 
-Physics: dalam **Layer Collision Matrix** matikan `Bobber` ↔ `Player`.
+### Cara main
+1. **Tahan LONTAR** untuk charge (bar biru), lepas untuk lontar. Charge penuh = jauh tapi kurang tepat.
+2. Tunggu. Bila pelampung terhenjut dan keluar **SENTAP!**, tekan **GULUNG** cepat (dalam ±1 saat).
+3. Tarik-tali: **tahan GULUNG** untuk tarik ikan masuk, **lepas** bila bar jadi kuning/merah.
+   - Tali tegang sangat = **putus**.
+   - Tali kendur terlalu lama = **ikan lepas**.
+   - Kekili akan lepaskan tali sendiri (drag) bila hampir putus.
+4. Ikan makin letih bila tali tegang. Tarik sampai dekat pangkalan untuk dapat syiling.
+5. Tak dapat apa? Tahan GULUNG masa menunggu untuk tarik pelampung balik dan lontar semula.
 
-### Shader air realistik (mobile)
-Buat Shader Graph *URP Lit* untuk air: dua normal map bergerak (scroll arah berbeza), warna kedalaman guna *Scene Depth* (hijau keruh untuk kolam, coklat untuk sungai/muara), Smoothness 0.95, Fresnel untuk pantulan langit, dan buih tepi guna beza kedalaman. Hidupkan **Depth Texture** dan **Opaque Texture** dalam aset URP. Alternatif cepat: aset percuma *Stylized/Realistic Water* dari Asset Store, tapi pastikan sokong URP mobile.
+---
 
-### UI sentuh (Canvas Screen Space Overlay, Scale With Screen Size 1920×1080)
-- Kiri bawah: `Joystick` (Image bulat + `TouchJoystick`, anak `Knob`).
-- Separuh kanan: Image lutsinar penuh (alpha 0, Raycast Target on) + `TouchLookArea`, letak **di belakang** butang.
-- Kanan bawah: butang besar **LONTAR** (`HoldButton` Action=Cast) dan **GULUNG** (`HoldButton` Action=Reel).
-- Kanan atas: butang **Kamera** → OnClick `MobileInput.PressCameraToggle`.
-- Tengah: `ChargeBar` (Image Filled), `TensionBar` (Image Filled + Gradient hijau→kuning→merah), teks mesej, ikon "SENTAP!", syiling.
+## Bahagian B: Main di fon Android (±30 minit, sekali setup je)
 
-## Cara main
-1. **Tahan LONTAR** untuk charge, lepas untuk lontar. Charge penuh = jauh tapi kurang tepat.
-2. Tunggu. Bila pelampung tenggelam dan muncul **SENTAP!**, tekan **GULUNG** cepat (dalam ~1 saat).
-3. Tarik-tali: **tahan GULUNG** untuk tarik masuk, **lepas** bila bar ketegangan merah. Tegang sangat = tali putus. Kendur lama sangat = ikan lepas. Kekili akan lepaskan tali sendiri (drag) bila hampir putus.
-4. Ikan makin letih bila tali tegang. Tarik sampai dekat untuk dapat syiling.
-5. Tahan GULUNG masa menunggu untuk tarik pelampung balik.
+1. **Java (JDK 17):** download dari https://adoptium.net (pilih *Temurin 17 LTS*), install.
+2. **Android SDK:** cara paling senang install **Android Studio** (https://developer.android.com/studio). Buka sekali, biar dia download SDK. Ingat lokasi SDK (Android Studio > Settings > Android SDK, contoh `C:\Users\NAMA\AppData\Local\Android\Sdk`).
+3. Dalam Godot: **Editor > Editor Settings > Export > Android**
+   - *Java SDK Path* = folder JDK 17 (contoh `C:\Program Files\Eclipse Adoptium\jdk-17...`)
+   - *Android SDK Path* = lokasi SDK tadi
+4. **Editor > Manage Export Templates > Download and Install.**
+5. **Project > Export > Add... > Android.** Biar tetapan asal. Tekan **Export Project**, nama fail `memancing.apk` (biar *Export With Debug* bertanda untuk uji).
+6. Salin `memancing.apk` ke fon (kabel USB / Google Drive / WhatsApp ke diri sendiri), buka dan **Install** (benarkan "Install unknown apps" kalau ditanya).
 
-Kawalan Editor: WASD, tahan klik kanan untuk pusing, Space lontar, Shift kiri gulung, V tukar kamera.
+> Kalau keluar ralat pasal *keystore*, tutup dan buka semula Godot selepas langkah 3 (Godot akan buat debug keystore sendiri). Kalau masih ralat, screenshot dan hantar.
 
-## Spesies contoh kolam (Create > Memancing > Fish Species)
-| Ikan | Berat (kg) | Tarikan | Agresif | Stamina | Syiling/kg | Peluang |
-|---|---|---|---|---|---|---|
-| Tilapia | 0.2–1.5 | 14 | 0.3 | 8 | 8 | 4 |
-| Keli | 0.3–3 | 20 | 0.35 | 12 | 10 | 3 |
-| Lampam Jawa | 0.2–1.2 | 12 | 0.5 | 7 | 9 | 3 |
-| Patin | 1–8 | 30 | 0.45 | 18 | 14 | 1.5 |
-| Haruan | 0.5–3 | 26 | 0.6 | 12 | 16 | 1 |
-| Toman | 2–10 | 38 | 0.7 | 22 | 22 | 0.3 |
+Cara lebih laju lepas ni: hidupkan **USB debugging** kat fon (Settings > About phone > tekan Build number 7 kali > Developer options), sambung kabel, dan tekan ikon Android kat atas kanan Godot untuk terus main di fon.
 
-Joran permulaan (Create > Memancing > Rod Stats): *Joran Buluh*, jarak 25 m, putus 60 N, gulung 1.6 m/s, daya 35 N, drag 0.85.
+---
 
-## Struktur skrip
+## Struktur projek
 ```
-Assets/Scripts/
-  Core/       MobileInput, CatchLog, WaterBob
-  Player/     AnglerController
-  CameraRig/  AnglerCamera (FPV/TPV)
-  Fishing/    FishingRod (state machine), Bobber, FishingLine
-  Fish/       FishSpecies, FishPool, HookedFish
-  Data/       RodStats
-  UI/         TouchJoystick, TouchLookArea, HoldButton, FishingHUD
+project.godot            tetapan projek (renderer Mobile, landskap)
+scenes/
+  main.tscn              scene utama: kolam, air, pemain, HUD, kawalan sentuh
+  angler.tscn            watak pemain + joran + kamera
+  bobber.tscn            pelampung + percikan air
+scripts/
+  core/      main.gd (syiling, tunjuk ikan), game_input.gd (kekunci + seret kamera)
+  player/    angler.gd (jalan, pusing, FPV/TPV)
+  fishing/   fishing_rod.gd (logik memancing), bobber.gd, fishing_line.gd, rod_stats.gd
+  fish/      fish_species.gd, fish_pool.gd, hooked_fish.gd, fish_model.gd
+  world/     pond_world.gd (jana tanah, pokok, batu, pangkalan, pondok)
+  ui/        hud.gd, touch_controls.gd
+shaders/water.gdshader   air low-poly berombak
+data/fish/*.tres         data ikan (boleh ubah dalam Inspector)
+data/rods/*.tres         data joran
+tests/test_flow.gd       ujian automatik
 ```
+
+### Ubah sendiri (mudah)
+- **Ikan:** buka `data/fish/` > klik fail ikan > ubah berat, kekuatan, syiling dalam panel Inspector.
+- **Joran:** `data/rods/joran_buluh.tres` (jarak lontar, had putus tali, laju gulung).
+- **Kolam:** klik node `PondWorld` dalam `main.tscn`, ubah saiz kolam / `world_seed`, tekan **Regenerate**.
+
+### Ikan kolam
+| Ikan | Berat (kg) | Tarikan | Agresif | Syiling/kg | Peluang |
+|---|---|---|---|---|---|
+| Tilapia | 0.2–1.5 | 14 | 0.3 | 8 | tinggi |
+| Keli | 0.3–3 | 20 | 0.35 | 10 | tinggi |
+| Lampam Jawa | 0.2–1.2 | 12 | 0.5 | 9 | tinggi |
+| Patin | 1–8 | 30 | 0.45 | 14 | sederhana |
+| Haruan | 0.5–3 | 26 | 0.6 | 16 | rendah |
+| Toman | 2–10 | 38 | 0.7 | 22 | jarang |
+
+### Ujian automatik
+```
+godot --headless --path . -s res://tests/test_flow.gd
+```
+Ujian ni jalan, tukar kamera, lontar, sentap, tarik-tali sampai dapat ikan, dan lontar ke darat.
+
+---
 
 ## Fasa seterusnya
 2. Ekonomi: jual ikan, kedai joran/tali/umpan, simpan data
 3. Semua kawasan (sungai, tasik, muara, pantai, laut) + kenderaan (kayak → sampan → bot kecil → bot laut dalam)
-4. Multiplayer co-op 2–4 orang (Netcode for GameObjects / Unity Relay)
-5. Cuaca, siang-malam, polish grafik
+4. Multiplayer co-op 2–4 orang
+5. Cuaca, siang-malam, bunyi, polish

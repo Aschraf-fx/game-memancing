@@ -1,0 +1,146 @@
+[gd_scene load_steps=20 format=3]
+
+[ext_resource type="Script" path="res://scripts/player/angler.gd" id="1_angler"]
+
+[sub_resource type="CapsuleShape3D" id="shape_body"]
+radius = 0.3
+height = 1.7
+
+[sub_resource type="StandardMaterial3D" id="mat_shirt"]
+albedo_color = Color(0.92, 0.48, 0.16, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="mat_pants"]
+albedo_color = Color(0.18, 0.24, 0.4, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="mat_skin"]
+albedo_color = Color(0.76, 0.56, 0.4, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="mat_hat"]
+albedo_color = Color(0.86, 0.76, 0.5, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="mat_rod"]
+albedo_color = Color(0.78, 0.66, 0.38, 1)
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="mat_reel"]
+albedo_color = Color(0.2, 0.2, 0.22, 1)
+metallic = 0.6
+roughness = 0.4
+
+[sub_resource type="BoxMesh" id="mesh_legs"]
+material = SubResource("mat_pants")
+size = Vector3(0.42, 0.8, 0.26)
+
+[sub_resource type="BoxMesh" id="mesh_torso"]
+material = SubResource("mat_shirt")
+size = Vector3(0.52, 0.62, 0.3)
+
+[sub_resource type="BoxMesh" id="mesh_arm"]
+material = SubResource("mat_shirt")
+size = Vector3(0.13, 0.13, 0.5)
+
+[sub_resource type="SphereMesh" id="mesh_head"]
+material = SubResource("mat_skin")
+radius = 0.16
+height = 0.32
+radial_segments = 8
+rings = 4
+
+[sub_resource type="CylinderMesh" id="mesh_hat"]
+material = SubResource("mat_hat")
+top_radius = 0.03
+bottom_radius = 0.34
+height = 0.16
+radial_segments = 8
+rings = 1
+
+[sub_resource type="CylinderMesh" id="mesh_rod"]
+material = SubResource("mat_rod")
+top_radius = 0.007
+bottom_radius = 0.022
+height = 2.4
+radial_segments = 6
+rings = 1
+
+[sub_resource type="CylinderMesh" id="mesh_reel"]
+material = SubResource("mat_reel")
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.05
+radial_segments = 8
+rings = 1
+
+[sub_resource type="SphereShape3D" id="shape_cam"]
+radius = 0.2
+
+[node name="Angler" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_angler")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.85, 0)
+shape = SubResource("shape_body")
+
+[node name="Body" type="Node3D" parent="."]
+
+[node name="Legs" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 0.4, 0)
+mesh = SubResource("mesh_legs")
+
+[node name="Torso" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 1.11, 0)
+mesh = SubResource("mesh_torso")
+
+[node name="ArmRight" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.26, 1.18, -0.2)
+rotation = Vector3(0.4, 0, 0)
+mesh = SubResource("mesh_arm")
+
+[node name="ArmLeft" type="MeshInstance3D" parent="Body"]
+position = Vector3(0.05, 1.12, -0.25)
+rotation = Vector3(0.3, -0.6, 0)
+mesh = SubResource("mesh_arm")
+
+[node name="HeadMesh" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 1.58, 0)
+mesh = SubResource("mesh_head")
+
+[node name="Hat" type="MeshInstance3D" parent="Body"]
+position = Vector3(0, 1.74, 0)
+mesh = SubResource("mesh_hat")
+
+[node name="RodPivot" type="Node3D" parent="."]
+position = Vector3(0.28, 1.12, -0.42)
+rotation = Vector3(0.61, 0, 0)
+
+[node name="Rod" type="MeshInstance3D" parent="RodPivot"]
+position = Vector3(0, 0, -1.2)
+rotation = Vector3(-1.5708, 0, 0)
+mesh = SubResource("mesh_rod")
+
+[node name="Reel" type="MeshInstance3D" parent="RodPivot"]
+position = Vector3(0, -0.06, -0.25)
+rotation = Vector3(0, 0, 1.5708)
+mesh = SubResource("mesh_reel")
+
+[node name="RodTip" type="Marker3D" parent="RodPivot"]
+position = Vector3(0, 0, -2.4)
+
+[node name="Head" type="Node3D" parent="."]
+position = Vector3(0, 1.62, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="Head"]
+collision_mask = 1
+shape = SubResource("shape_cam")
+spring_length = 3.5
+
+[node name="Camera3D" type="Camera3D" parent="Head/SpringArm3D"]
+current = true
+fov = 70.0
+near = 0.05
+far = 300.0

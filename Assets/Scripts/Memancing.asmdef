@@ -1,6 +1,0 @@
-{
-    "name": "Memancing",
-    "rootNamespace": "Memancing",
-    "references": ["Unity.TextMeshPro"],
-    "autoReferenced": true
-}

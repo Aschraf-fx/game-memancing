@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="FishSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/fish/fish_species.gd" id="1_fish"]
+
+[resource]
+script = ExtResource("1_fish")
+display_name = "Patin"
+color = Color(0.72, 0.74, 0.78, 1)
+min_weight = 1.0
+max_weight = 8.0
+pull_strength = 30.0
+aggression = 0.45
+stamina = 18.0
+coins_per_kg = 14
+spawn_weight = 1.5

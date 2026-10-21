@@ -1,20 +1,8 @@
-# Unity
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
-/[Uu]ser[Ss]ettings/
-/[Mm]emoryCaptures/
-*.csproj
-*.sln
-*.user
-*.pidb
-*.booproj
+# Godot 4
+.godot/
+/android/
 *.apk
 *.aab
-*.unitypackage
-.vs/
-.idea/
+*.keystore
+export_credentials.cfg
 .DS_Store
